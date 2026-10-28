@@ -643,7 +643,7 @@ function initDraggableDesktopIcons() {
 // CLIENT-SIDE OFFICE SUITE (WORD, EXCEL, POWERPOINT)
 // ============================================================================
 
-// 1. WORD (Quill.js Rich Text)
+// 1. WORD (Quill.js Rich Text - Real Blank Functional Editor)
 let quillInstance = null;
 
 function initWordApp() {
@@ -653,159 +653,115 @@ function initWordApp() {
     if (!quillInstance) {
         quillInstance = new Quill('#quillEditor', {
             theme: 'snow',
-            placeholder: 'Start writing your infrastructure report or technical specification...',
+            placeholder: 'Type your document here...',
             modules: {
                 toolbar: [
-                    [{ 'header': [1, 2, 3, false] }],
+                    [{ 'font': [] }, { 'size': ['small', false, 'large', 'huge'] }],
+                    [{ 'header': [1, 2, 3, 4, 5, 6, false] }],
                     ['bold', 'italic', 'underline', 'strike'],
-                    [{ 'list': 'ordered'}, { 'list': 'bullet' }],
                     [{ 'color': [] }, { 'background': [] }],
-                    ['code-block', 'blockquote'],
+                    [{ 'script': 'sub' }, { 'script': 'super' }],
+                    [{ 'list': 'ordered' }, { 'list': 'bullet' }],
+                    [{ 'align': [] }],
+                    [{ 'indent': '-1' }, { 'indent': '+1' }],
+                    ['blockquote', 'code-block'],
+                    ['link', 'image'],
                     ['clean']
                 ]
             }
         });
-
-        // Seed with sample digital infrastructure audit
-        quillInstance.root.innerHTML = `
-            <h2>ISTA Assaka - Digital Infrastructure & Security Audit</h2>
-            <p><strong>Lead Engineer:</strong> Jamal Idhammou</p>
-            <p><strong>Specialization:</strong> Systems, Networks & IT Defense</p>
-            <hr>
-            <h3>Executive Summary</h3>
-            <p>This report documents the network segmentation, Cisco Packet Tracer routing configurations, and Linux server hardening implemented across the campus core network.</p>
-            <ul>
-                <li><strong>Network Isolation:</strong> IoT VLAN and DMZ clusters protected with ACLs.</li>
-                <li><strong>Virtualization:</strong> VMware and Windows Server 2022 AD DS deployment.</li>
-                <li><strong>Local Telemetry:</strong> ESP32-S3 sensor capture via TLS channels.</li>
-            </ul>
-        `;
+        // Opens as completely blank functional document
+        quillInstance.setText('');
     }
 }
 
 function resetWordDoc() {
-    if (quillInstance && confirm('Create a new blank document?')) {
-        quillInstance.setContents([]);
+    if (quillInstance && confirm('Clear document and start a new blank page?')) {
+        quillInstance.setText('');
     }
 }
 
 function exportWordDoc() {
     if (!quillInstance) return;
-    const htmlContent = `
-<!DOCTYPE html>
+    const htmlContent = `<!DOCTYPE html>
 <html>
 <head>
     <meta charset="utf-8">
     <title>Word Document Export</title>
     <style>
-        body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; line-height: 1.6; max-width: 800px; margin: 40px auto; padding: 20px; }
-        h1, h2, h3 { color: #111; }
+        body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; line-height: 1.6; max-width: 800px; margin: 40px auto; padding: 24px; color: #111; }
+        h1, h2, h3, h4 { color: #111; }
     </style>
 </head>
 <body>
 ${quillInstance.root.innerHTML}
 </body>
 </html>`;
-    downloadFile('Report_Jamal_Idhammou.html', htmlContent, 'text/html');
+    downloadFile('Document.html', htmlContent, 'text/html');
 }
 
-// 2. EXCEL SPREADSHEET (Pure Client-side Dynamic Engine)
-const excelRows = 24;
-const excelCols = 10; // A through J
-const colNames = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J'];
-let excelData = {};
+// 2. EXCEL SPREADSHEET (Jspreadsheet CE - Real Grid with Formulas, Rows & Columns)
+let jexcelInstance = null;
 
 function initExcelApp() {
-    const container = document.getElementById('excelGridContainer');
-    if (!container) return;
+    const container = document.getElementById('jspreadsheetGrid');
+    if (!container || typeof jspreadsheet === 'undefined') return;
 
-    // Seed default network inventory data
-    excelData = {
-        'A1': 'Subnet / VLAN', 'B1': 'Gateway IP', 'C1': 'Hosts', 'D1': 'Throughput', 'E1': 'Status',
-        'A2': 'VLAN 10 - Admin Core', 'B2': '192.168.10.1', 'C2': '14', 'D2': '1 Gbps', 'E2': 'SECURE',
-        'A3': 'VLAN 20 - Virtual Farm', 'B3': '192.168.20.1', 'C3': '28', 'D3': '2.5 Gbps', 'E3': 'SECURE',
-        'A4': 'VLAN 30 - ESP32 IoT', 'B4': '192.168.30.1', 'C4': '64', 'D4': '100 Mbps', 'E4': 'ISOLATED',
-        'A5': 'VLAN 40 - DMZ Public', 'B5': '192.168.40.1', 'C5': '8', 'D5': '500 Mbps', 'E5': 'FILTERED'
-    };
-
-    renderExcelTable();
-}
-
-function renderExcelTable() {
-    const container = document.getElementById('excelGridContainer');
-    if (!container) return;
-
-    let html = '<table class="excel-table"><thead><tr><th class="excel-row-header">#</th>';
-    for (let c = 0; c < excelCols; c++) {
-        html += `<th>${colNames[c]}</th>`;
-    }
-    html += '</tr></thead><tbody>';
-
-    for (let r = 1; r <= excelRows; r++) {
-        html += `<tr><td class="excel-row-header">${r}</td>`;
-        for (let c = 0; c < excelCols; c++) {
-            const cellId = `${colNames[c]}${r}`;
-            const val = excelData[cellId] || '';
-            html += `<td class="excel-cell" contenteditable="true" data-cell="${cellId}" spellcheck="false">${escapeHTML(val)}</td>`;
+    if (!jexcelInstance) {
+        // Initialize real interactive spreadsheet with 30 rows and 10 columns (A - J)
+        const initialData = [];
+        for (let r = 0; r < 30; r++) {
+            initialData.push(new Array(10).fill(''));
         }
-        html += '</tr>';
-    }
-    html += '</tbody></table>';
 
-    container.innerHTML = html;
-
-    // Cell event listeners
-    const formulaInput = document.getElementById('excelFormulaInput');
-    container.querySelectorAll('.excel-cell').forEach(cell => {
-        const cellId = cell.getAttribute('data-cell');
-
-        cell.addEventListener('focus', () => {
-            if (formulaInput) formulaInput.value = excelData[cellId] || '';
+        jexcelInstance = jspreadsheet(container, {
+            data: initialData,
+            minDimensions: [10, 30],
+            tableOverflow: true,
+            tableWidth: '100%',
+            tableHeight: '100%',
+            columns: [
+                { type: 'text', width: 100 },
+                { type: 'text', width: 100 },
+                { type: 'text', width: 100 },
+                { type: 'text', width: 100 },
+                { type: 'text', width: 100 },
+                { type: 'text', width: 100 },
+                { type: 'text', width: 100 },
+                { type: 'text', width: 100 },
+                { type: 'text', width: 100 },
+                { type: 'text', width: 100 }
+            ],
+            allowToolbar: true,
+            allowComments: true,
+            defaultColAlign: 'left',
+            parseFormulas: true
         });
-
-        cell.addEventListener('input', () => {
-            const val = cell.innerText;
-            excelData[cellId] = val;
-            if (formulaInput) formulaInput.value = val;
-        });
-    });
-}
-
-function addExcelRow() {
-    alert('Row added. You can freely edit any cell in the grid.');
-}
-
-function exportExcelCsv() {
-    let csv = '';
-    for (let r = 1; r <= excelRows; r++) {
-        let rowCells = [];
-        let hasContent = false;
-        for (let c = 0; c < excelCols; c++) {
-            const cellId = `${colNames[c]}${r}`;
-            const val = (excelData[cellId] || '').replace(/"/g, '""');
-            if (val) hasContent = true;
-            rowCells.push(`"${val}"`);
-        }
-        if (hasContent || r <= 6) {
-            csv += rowCells.join(',') + '\r\n';
-        }
     }
-    downloadFile('Metrics_ISTA_Assaka.csv', csv, 'text/csv;charset=utf-8;');
 }
 
-// 3. POWERPOINT PRESENTATION (Interactive Slide Engine)
+function insertSpreadsheetRow() {
+    if (jexcelInstance) {
+        jexcelInstance.insertRow();
+    }
+}
+
+function insertSpreadsheetCol() {
+    if (jexcelInstance) {
+        jexcelInstance.insertColumn();
+    }
+}
+
+function exportSpreadsheetCsv() {
+    if (!jexcelInstance) return;
+    const csvContent = jexcelInstance.download(true); // Jspreadsheet direct CSV export
+}
+
+// 3. POWERPOINT PRESENTATION (Real Blank Interactive Slide Creator)
 let slides = [
     {
-        title: 'Digital Infrastructure & Systems Architecture',
-        body: '• Lead Specialist: Jamal Idhammou (ISTA Assaka, Agadir)\n• Core Disciplines: Enterprise Networks, Virtualization & Ethical Pentesting\n• Mission: Building resilient, automated, zero-trust digital systems'
-    },
-    {
-        title: 'Voice Meaning Mapper (AI Assistive Tech)',
-        body: '• Purpose: Speech pattern & acoustic recognition for individuals with communication impairments\n• Architecture: Local offline Python inference pipeline with SQLite database\n• Highlight: 100% On-Premise / Privacy-First'
-    },
-    {
-        title: 'ESP32-S3 IoT Hardware & Telemetry',
-        body: '• Microcontroller: ESP32-S3 with environmental sensor arrays\n• Security: Isolated VLAN containment with TLS telemetry transmission\n• Integration: Python/MicroPython socket pipelines'
+        title: '',
+        body: ''
     }
 ];
 let currentSlideIndex = 0;
@@ -844,9 +800,10 @@ function renderPowerPointThumbnails() {
     slides.forEach((slide, idx) => {
         const card = document.createElement('div');
         card.className = `ppt-thumb-card ${idx === currentSlideIndex ? 'active' : ''}`;
+        const preview = slide.title.trim() ? escapeHTML(slide.title) : `Slide ${idx + 1}`;
         card.innerHTML = `
             <div class="ppt-thumb-num">SLIDE ${idx + 1}</div>
-            <div class="ppt-thumb-preview">${escapeHTML(slide.title || 'Untitled Slide')}</div>
+            <div class="ppt-thumb-preview">${preview}</div>
         `;
         card.addEventListener('click', () => {
             currentSlideIndex = idx;
@@ -862,14 +819,20 @@ function loadActiveSlide() {
     const bodyBox = document.getElementById('pptSlideBody');
     const s = slides[currentSlideIndex] || slides[0];
 
-    if (titleBox) titleBox.innerText = s.title;
-    if (bodyBox) bodyBox.innerText = s.body;
+    if (titleBox) {
+        titleBox.innerText = s.title;
+        titleBox.setAttribute('data-placeholder', 'Click to add slide title...');
+    }
+    if (bodyBox) {
+        bodyBox.innerText = s.body;
+        bodyBox.setAttribute('data-placeholder', 'Click to add text or bullet points...');
+    }
 }
 
 function addSlide() {
     slides.push({
-        title: `New Slide ${slides.length + 1}`,
-        body: '• Add bullet point or system specification\n• Detail architectural requirements'
+        title: '',
+        body: ''
     });
     currentSlideIndex = slides.length - 1;
     renderPowerPointThumbnails();
@@ -879,7 +842,7 @@ function addSlide() {
 function duplicateCurrentSlide() {
     const cur = slides[currentSlideIndex];
     slides.splice(currentSlideIndex + 1, 0, {
-        title: `${cur.title} (Copy)`,
+        title: cur.title,
         body: cur.body
     });
     currentSlideIndex++;
@@ -889,39 +852,40 @@ function duplicateCurrentSlide() {
 
 function deleteCurrentSlide() {
     if (slides.length <= 1) {
-        alert('You must have at least one slide.');
-        return;
+        // Reset to single blank slide
+        slides = [{ title: '', body: '' }];
+        currentSlideIndex = 0;
+    } else {
+        slides.splice(currentSlideIndex, 1);
+        if (currentSlideIndex >= slides.length) currentSlideIndex = slides.length - 1;
     }
-    slides.splice(currentSlideIndex, 1);
-    if (currentSlideIndex >= slides.length) currentSlideIndex = slides.length - 1;
     renderPowerPointThumbnails();
     loadActiveSlide();
 }
 
 function exportSlides() {
     let slidesHtml = slides.map((s, idx) => `
-        <div style="page-break-after: always; padding: 40px; margin-bottom: 30px; border: 1px solid #ddd; border-radius: 8px; background: #fff;">
-            <span style="color: #E95420; font-weight: bold; font-size: 12px;">SLIDE ${idx + 1}</span>
-            <h1 style="color: #111; margin-top: 8px;">${escapeHTML(s.title)}</h1>
-            <div style="font-size: 16px; line-height: 1.8; color: #333; white-space: pre-line;">${escapeHTML(s.body)}</div>
+        <div style="page-break-after: always; padding: 48px; margin-bottom: 30px; border: 1px solid #e2e8f0; border-radius: 8px; background: #fff; min-height: 400px;">
+            <span style="color: #E95420; font-weight: bold; font-size: 12px; letter-spacing: 0.5px;">SLIDE ${idx + 1}</span>
+            <h1 style="color: #111; margin-top: 10px; font-size: 28px;">${escapeHTML(s.title || 'Untitled Slide')}</h1>
+            <div style="font-size: 16px; line-height: 1.8; color: #374151; white-space: pre-line; margin-top: 20px;">${escapeHTML(s.body)}</div>
         </div>
     `).join('');
 
-    const doc = `
-<!DOCTYPE html>
+    const doc = `<!DOCTYPE html>
 <html>
 <head>
     <meta charset="utf-8">
-    <title>Pitch Presentation Export</title>
-    <style>body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; background: #f3f4f6; padding: 20px; }</style>
+    <title>Presentation Export</title>
+    <style>body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; background: #f3f4f6; padding: 24px; }</style>
 </head>
 <body>
-    <div style="max-width: 800px; margin: auto;">
+    <div style="max-width: 820px; margin: auto;">
         ${slidesHtml}
     </div>
 </body>
 </html>`;
-    downloadFile('Pitch_Jamal_Idhammou.html', doc, 'text/html');
+    downloadFile('Presentation.html', doc, 'text/html');
 }
 
 // 4. COMMON HELPER: Download File Locally

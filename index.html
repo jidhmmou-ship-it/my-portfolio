@@ -13,9 +13,16 @@
     <link href="https://fonts.googleapis.com/css2?family=Ubuntu:ital,wght@0,300;0,400;0,500;0,700;1,400&family=Ubuntu+Mono:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     
-    <!-- Client-Side Office Libraries (Quill Rich Text) -->
+    <!-- Client-Side Office Libraries -->
+    <!-- 1. Quill.js (Word Editor) -->
     <link href="https://cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet">
     <script src="https://cdn.quilljs.com/1.3.6/quill.min.js"></script>
+
+    <!-- 2. Jspreadsheet & Jsuites (Real Spreadsheet Grid) -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/jsuites/dist/jsuites.css">
+    <script src="https://cdn.jsdelivr.net/npm/jsuites/dist/jsuites.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/jspreadsheet-ce/dist/jspreadsheet.css">
+    <script src="https://cdn.jsdelivr.net/npm/jspreadsheet-ce/dist/jspreadsheet.js"></script>
     
     <link rel="stylesheet" href="style.css">
 </head>
@@ -665,7 +672,7 @@
             </div>
 
             <!-- 8. EXCEL SPREADSHEET APP -->
-            <div class="window" id="win-excel" data-app="excel" style="top: 75px; left: 140px; width: 920px; height: 580px;">
+            <div class="window" id="win-excel" data-app="excel" style="top: 75px; left: 140px; width: 940px; height: 580px;">
                 <div class="window-header">
                     <div class="window-controls">
                         <button class="win-btn win-close" title="Close" onclick="closeApp('excel')"></button>
@@ -677,17 +684,14 @@
                 <div class="window-body office-app-body">
                     <div class="office-toolbar">
                         <div class="office-app-tag excel"><i class="fa-solid fa-file-excel"></i> Excel</div>
-                        <div class="excel-formula-bar">
-                            <span class="formula-label">fx</span>
-                            <input type="text" id="excelFormulaInput" placeholder="Formula or value..." readonly>
-                        </div>
                         <div class="office-actions">
-                            <button class="btn-office" onclick="addExcelRow()"><i class="fa-solid fa-plus"></i> Add Row</button>
-                            <button class="btn-office primary" onclick="exportExcelCsv()"><i class="fa-solid fa-file-csv"></i> Export CSV</button>
+                            <button class="btn-office" onclick="insertSpreadsheetRow()"><i class="fa-solid fa-plus"></i> Insert Row</button>
+                            <button class="btn-office" onclick="insertSpreadsheetCol()"><i class="fa-solid fa-plus"></i> Insert Column</button>
+                            <button class="btn-office primary" onclick="exportSpreadsheetCsv()"><i class="fa-solid fa-file-csv"></i> Export CSV</button>
                         </div>
                     </div>
-                    <div class="excel-grid-container" id="excelGridContainer">
-                        <!-- Rendered dynamically by script.js -->
+                    <div class="excel-grid-container" id="spreadsheetWrapper">
+                        <div id="jspreadsheetGrid"></div>
                     </div>
                 </div>
             </div>

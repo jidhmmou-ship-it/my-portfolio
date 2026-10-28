@@ -1528,50 +1528,36 @@ body, html {
     flex: 1;
     overflow: auto;
     background: #ffffff;
+    position: relative;
 }
 
-.excel-table {
-    border-collapse: collapse;
-    width: 100%;
-    font-size: 12px;
-    table-layout: fixed;
+/* Jspreadsheet UI adjustments inside window */
+.jexcel_container {
+    width: 100% !important;
+    height: 100% !important;
 }
 
-.excel-table th, .excel-table td {
-    border: 1px solid #e5e7eb;
-    padding: 4px 6px;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
+.jexcel {
+    border-collapse: separate;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif !important;
+    font-size: 13px !important;
 }
 
-.excel-table th {
-    background-color: #f3f4f6;
-    color: #4b5563;
-    font-weight: 600;
-    text-align: center;
-    user-select: none;
-    height: 26px;
+.jexcel > thead > tr > td {
+    background-color: #f3f4f6 !important;
+    color: #4b5563 !important;
+    font-weight: 600 !important;
+    border-color: #e5e7eb !important;
 }
 
-.excel-row-header {
-    width: 44px;
-    background-color: #f3f4f6;
-    text-align: center;
-    font-weight: 600;
-    color: #6b7280;
+.jexcel > tbody > tr > td {
+    border-color: #e5e7eb !important;
 }
 
-.excel-cell {
-    background: #ffffff;
-    outline: none;
-    height: 26px;
-}
-
-.excel-cell:focus {
-    outline: 2px solid #217346;
-    background: #f0fdf4;
-    z-index: 2;
+.jexcel_toolbar {
+    background-color: #ffffff !important;
+    border-bottom: 1px solid #e5e7eb !important;
+    padding: 4px 8px !important;
 }
 
 /* PowerPoint App Styling */
