@@ -145,6 +145,10 @@ function openApp(appId) {
 
     if (appId === 'terminal') {
         setTimeout(focusTerminalInput, 50);
+    } else if (appId === 'word') {
+        setTimeout(initWordApp, 60);
+    } else if (appId === 'excel') {
+        setTimeout(initExcelApp, 60);
     }
 }
 
@@ -640,49 +644,47 @@ function initDraggableDesktopIcons() {
 }
 
 // ============================================================================
-// CLIENT-SIDE OFFICE SUITE (WORD, EXCEL, POWERPOINT)
+// CLIENT-SIDE OFFICE SUITE (TINYMCE & JSPREADSHEET APIS)
 // ============================================================================
 
-// 1. WORD (Quill.js Rich Text - Real Blank Functional Editor)
-let quillInstance = null;
+// 1. WORD (TinyMCE API)
+let tinymceInitialized = false;
 
 function initWordApp() {
-    const editorElem = document.getElementById('quillEditor');
-    if (!editorElem || typeof Quill === 'undefined') return;
+    if (tinymceInitialized || typeof tinymce === 'undefined') return;
 
-    if (!quillInstance) {
-        quillInstance = new Quill('#quillEditor', {
-            theme: 'snow',
-            placeholder: 'Type your document here...',
-            modules: {
-                toolbar: [
-                    [{ 'font': [] }, { 'size': ['small', false, 'large', 'huge'] }],
-                    [{ 'header': [1, 2, 3, 4, 5, 6, false] }],
-                    ['bold', 'italic', 'underline', 'strike'],
-                    [{ 'color': [] }, { 'background': [] }],
-                    [{ 'script': 'sub' }, { 'script': 'super' }],
-                    [{ 'list': 'ordered' }, { 'list': 'bullet' }],
-                    [{ 'align': [] }],
-                    [{ 'indent': '-1' }, { 'indent': '+1' }],
-                    ['blockquote', 'code-block'],
-                    ['link', 'image'],
-                    ['clean']
-                ]
-            }
-        });
-        // Opens as completely blank functional document
-        quillInstance.setText('');
-    }
+    tinymce.init({
+        selector: '#tinymce-word',
+        height: '100%',
+        menubar: 'file edit view insert format tools table',
+        plugins: [
+            'advlist', 'autolink', 'lists', 'link', 'image', 'charmap', 'preview',
+            'anchor', 'searchreplace', 'visualblocks', 'code', 'fullscreen',
+            'insertdatetime', 'media', 'table', 'help', 'wordcount'
+        ],
+        toolbar: 'undo redo | blocks fontfamily fontsize | bold italic underline strikethrough | ' +
+                 'alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | ' +
+                 'forecolor backcolor removeformat | link image table | code preview help',
+        content_style: 'body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; font-size: 14px; line-height: 1.6; padding: 20px; }',
+        setup: (editor) => {
+            editor.on('init', () => {
+                tinymceInitialized = true;
+            });
+        }
+    });
 }
 
 function resetWordDoc() {
-    if (quillInstance && confirm('Clear document and start a new blank page?')) {
-        quillInstance.setText('');
+    if (typeof tinymce !== 'undefined' && tinymce.get('tinymce-word')) {
+        if (confirm('Clear document and start a new blank page?')) {
+            tinymce.get('tinymce-word').setContent('');
+        }
     }
 }
 
 function exportWordDoc() {
-    if (!quillInstance) return;
+    if (typeof tinymce === 'undefined' || !tinymce.get('tinymce-word')) return;
+    const content = tinymce.get('tinymce-word').getContent();
     const htmlContent = `<!DOCTYPE html>
 <html>
 <head>
@@ -690,50 +692,29 @@ function exportWordDoc() {
     <title>Word Document Export</title>
     <style>
         body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; line-height: 1.6; max-width: 800px; margin: 40px auto; padding: 24px; color: #111; }
-        h1, h2, h3, h4 { color: #111; }
     </style>
 </head>
 <body>
-${quillInstance.root.innerHTML}
+${content}
 </body>
 </html>`;
     downloadFile('Document.html', htmlContent, 'text/html');
 }
 
-// 2. EXCEL SPREADSHEET (Jspreadsheet CE - Real Grid with Formulas, Rows & Columns)
+// 2. EXCEL SPREADSHEET (Jspreadsheet API - Real Interactive Grid)
 let jexcelInstance = null;
 
 function initExcelApp() {
-    const container = document.getElementById('jspreadsheetGrid');
+    const container = document.getElementById('excel-container');
     if (!container || typeof jspreadsheet === 'undefined') return;
 
     if (!jexcelInstance) {
-        // Initialize real interactive spreadsheet with 30 rows and 10 columns (A - J)
-        const initialData = [];
-        for (let r = 0; r < 30; r++) {
-            initialData.push(new Array(10).fill(''));
-        }
-
         jexcelInstance = jspreadsheet(container, {
-            data: initialData,
-            minDimensions: [10, 30],
+            minDimensions: [15, 15],
             tableOverflow: true,
             tableWidth: '100%',
             tableHeight: '100%',
-            columns: [
-                { type: 'text', width: 100 },
-                { type: 'text', width: 100 },
-                { type: 'text', width: 100 },
-                { type: 'text', width: 100 },
-                { type: 'text', width: 100 },
-                { type: 'text', width: 100 },
-                { type: 'text', width: 100 },
-                { type: 'text', width: 100 },
-                { type: 'text', width: 100 },
-                { type: 'text', width: 100 }
-            ],
             allowToolbar: true,
-            allowComments: true,
             defaultColAlign: 'left',
             parseFormulas: true
         });
@@ -754,7 +735,7 @@ function insertSpreadsheetCol() {
 
 function exportSpreadsheetCsv() {
     if (!jexcelInstance) return;
-    const csvContent = jexcelInstance.download(true); // Jspreadsheet direct CSV export
+    jexcelInstance.download(true); // Jspreadsheet direct CSV export
 }
 
 // 3. POWERPOINT PRESENTATION (Real Blank Interactive Slide Creator)
