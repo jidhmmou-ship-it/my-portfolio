@@ -1,0 +1,1313 @@
+/* ==========================================================================
+   Ubuntu 20.04 Focal Fossa Web Desktop Theme
+   Jamal Idhammou - Systems, Networks & Cybersecurity Portfolio
+   ========================================================================== */
+
+:root {
+    --ubuntu-orange: #E95420;
+    --ubuntu-aubergine-dark: #2C001E;
+    --ubuntu-aubergine-mid: #5E2750;
+    --ubuntu-aubergine-light: #77216F;
+    --ubuntu-gray-dark: #111111;
+    --ubuntu-gray-panel: rgba(17, 17, 17, 0.95);
+    --ubuntu-gray-window: #282828;
+    --ubuntu-gray-border: #3c3b37;
+    --ubuntu-gray-header: #202020;
+    --ubuntu-text-main: #dfdbd2;
+    --ubuntu-text-muted: #9e9d9b;
+    --ubuntu-text-bright: #ffffff;
+    --ubuntu-green: #38b44a;
+    --ubuntu-blue: #19b6ee;
+    --ubuntu-dock-bg: rgba(16, 16, 16, 0.88);
+    --ubuntu-card-bg: #2d2d2d;
+    --ubuntu-chip-bg: #383838;
+    --shadow-window: 0 16px 40px rgba(0, 0, 0, 0.65), 0 0 1px rgba(255, 255, 255, 0.15);
+    --radius-window: 8px;
+    --radius-control: 4px;
+}
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body, html {
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    font-family: 'Ubuntu', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    color: var(--ubuntu-text-main);
+    background-color: #1a0815;
+    background-image: url('images/wallpapers/wall-1.webp');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    user-select: none;
+    -webkit-font-smoothing: antialiased;
+}
+
+/* ==========================================================================
+   TOP BAR
+   ========================================================================== */
+.top-bar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 28px;
+    background-color: var(--ubuntu-gray-panel);
+    backdrop-filter: blur(8px);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 12px;
+    font-size: 13px;
+    font-weight: 500;
+    z-index: 10000;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.top-bar-left, .top-bar-center, .top-bar-right {
+    display: flex;
+    align-items: center;
+    height: 100%;
+}
+
+.activities-btn {
+    padding: 2px 10px;
+    border-radius: var(--radius-control);
+    cursor: pointer;
+    transition: background-color 0.15s ease;
+}
+
+.activities-btn:hover {
+    background-color: rgba(255, 255, 255, 0.15);
+}
+
+.clock {
+    font-weight: 500;
+    cursor: default;
+    padding: 2px 10px;
+    border-radius: var(--radius-control);
+}
+
+.clock:hover {
+    background-color: rgba(255, 255, 255, 0.1);
+}
+
+.status-cluster {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 3px 10px;
+    border-radius: 14px;
+    cursor: pointer;
+    transition: background-color 0.15s ease;
+    font-size: 12px;
+}
+
+.status-cluster:hover, .status-cluster.active {
+    background-color: rgba(255, 255, 255, 0.15);
+}
+
+.status-arrow {
+    font-size: 10px;
+    margin-left: 2px;
+}
+
+/* Status Dropdown */
+.status-dropdown {
+    position: absolute;
+    top: 32px;
+    right: 8px;
+    width: 260px;
+    background-color: #242424;
+    border: 1px solid var(--ubuntu-gray-border);
+    border-radius: 8px;
+    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.7);
+    padding: 12px;
+    display: none;
+    flex-direction: column;
+    gap: 8px;
+    z-index: 10001;
+}
+
+.status-dropdown.show {
+    display: flex;
+}
+
+.dropdown-row {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    color: var(--ubuntu-text-muted);
+}
+
+.dropdown-row i {
+    width: 18px;
+    text-align: center;
+}
+
+.slider {
+    flex: 1;
+    accent-color: var(--ubuntu-orange);
+    cursor: pointer;
+}
+
+.dropdown-divider {
+    height: 1px;
+    background: rgba(255, 255, 255, 0.1);
+    margin: 4px 0;
+}
+
+.dropdown-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 8px 10px;
+    border-radius: var(--radius-control);
+    cursor: pointer;
+    font-size: 13px;
+    transition: background 0.15s ease;
+}
+
+.dropdown-item:hover {
+    background: rgba(255, 255, 255, 0.1);
+}
+
+.dropdown-item i {
+    width: 18px;
+    text-align: center;
+    color: var(--ubuntu-orange);
+}
+
+.pill-active {
+    margin-left: auto;
+    font-size: 11px;
+    background: rgba(56, 180, 74, 0.2);
+    color: var(--ubuntu-green);
+    padding: 2px 6px;
+    border-radius: 10px;
+}
+
+/* ==========================================================================
+   DESKTOP SCREEN & DOCK
+   ========================================================================== */
+.desktop-screen {
+    position: absolute;
+    top: 28px;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    display: flex;
+    overflow: hidden;
+}
+
+/* Dock */
+.dock {
+    width: 58px;
+    height: 100%;
+    background-color: var(--ubuntu-dock-bg);
+    backdrop-filter: blur(10px);
+    border-right: 1px solid rgba(255, 255, 255, 0.06);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-between;
+    padding: 8px 0;
+    z-index: 5000;
+}
+
+.dock-apps {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    align-items: center;
+    width: 100%;
+}
+
+.dock-icon {
+    position: relative;
+    width: 48px;
+    height: 48px;
+    background: transparent;
+    border: none;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: transform 0.15s cubic-bezier(0.4, 0, 0.2, 1), background-color 0.15s ease;
+}
+
+.dock-icon img {
+    width: 38px;
+    height: 38px;
+    object-fit: contain;
+    filter: drop-shadow(0 2px 4px rgba(0,0,0,0.4));
+}
+
+.dock-icon:hover {
+    background-color: rgba(255, 255, 255, 0.12);
+    transform: scale(1.05);
+}
+
+.dock-icon:active {
+    transform: scale(0.96);
+}
+
+.dock-indicator {
+    display: none;
+    position: absolute;
+    left: 2px;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 4px;
+    height: 4px;
+    background-color: var(--ubuntu-orange);
+    border-radius: 50%;
+}
+
+.dock-icon.running .dock-indicator {
+    display: block;
+}
+
+.dock-icon.focused {
+    background-color: rgba(255, 255, 255, 0.18);
+}
+
+.dock-bottom {
+    margin-bottom: 4px;
+}
+
+.grid-icon svg {
+    opacity: 0.9;
+    transition: opacity 0.2s ease, transform 0.2s ease;
+}
+
+.grid-icon:hover svg {
+    opacity: 1;
+    transform: rotate(90deg);
+}
+
+/* Desktop Grid Icons */
+.desktop-grid {
+    position: absolute;
+    top: 14px;
+    left: 70px;
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+    z-index: 10;
+}
+
+.desktop-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 86px;
+    padding: 8px 4px;
+    border-radius: 6px;
+    text-align: center;
+    cursor: pointer;
+    transition: background-color 0.15s ease;
+}
+
+.desktop-item:hover, .desktop-item:focus {
+    background-color: rgba(233, 84, 32, 0.3);
+    outline: 1px dotted rgba(255, 255, 255, 0.3);
+}
+
+.desktop-item img {
+    width: 46px;
+    height: 46px;
+    object-fit: contain;
+    filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.7));
+    margin-bottom: 6px;
+}
+
+.desktop-item span {
+    font-size: 12px;
+    color: #ffffff;
+    text-shadow: 0 1px 3px rgba(0, 0, 0, 0.9);
+    word-break: break-word;
+    line-height: 1.2;
+}
+
+/* ==========================================================================
+   WINDOWS SYSTEM
+   ========================================================================== */
+.windows-container {
+    position: absolute;
+    top: 0;
+    left: 58px;
+    right: 0;
+    bottom: 0;
+    pointer-events: none;
+}
+
+.window {
+    position: absolute;
+    pointer-events: auto;
+    background-color: var(--ubuntu-gray-window);
+    border-radius: var(--radius-window);
+    box-shadow: var(--shadow-window);
+    border: 1px solid var(--ubuntu-gray-border);
+    display: none;
+    flex-direction: column;
+    overflow: hidden;
+    min-width: 420px;
+    min-height: 280px;
+    transition: box-shadow 0.2s ease;
+}
+
+.window.active {
+    display: flex;
+}
+
+.window.minimized {
+    display: none !important;
+}
+
+.window.focused {
+    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.75), 0 0 0 1px rgba(233, 84, 32, 0.45);
+}
+
+.window.maximized {
+    top: 0 !important;
+    left: 0 !important;
+    width: 100% !important;
+    height: 100% !important;
+    border-radius: 0;
+}
+
+/* Window Header */
+.window-header {
+    height: 38px;
+    background-color: var(--ubuntu-gray-header);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+    display: flex;
+    align-items: center;
+    padding: 0 12px;
+    cursor: move;
+    user-select: none;
+}
+
+.window-controls {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    z-index: 5;
+}
+
+.win-btn {
+    width: 14px;
+    height: 14px;
+    border-radius: 50%;
+    border: none;
+    cursor: pointer;
+    transition: opacity 0.15s ease, transform 0.1s ease;
+    opacity: 0.85;
+}
+
+.win-btn:hover {
+    opacity: 1;
+    transform: scale(1.1);
+}
+
+.win-close {
+    background-color: #E95420;
+}
+
+.win-minimize {
+    background-color: #77216F;
+}
+
+.win-maximize {
+    background-color: #38b44a;
+}
+
+.window-title {
+    flex: 1;
+    text-align: center;
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--ubuntu-text-bright);
+    margin-right: 50px; /* Offset window controls for visual center */
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.window-body {
+    flex: 1;
+    overflow-y: auto;
+    position: relative;
+    user-select: text;
+}
+
+/* Scrollbar Styling */
+.window-body::-webkit-scrollbar,
+.about-content::-webkit-scrollbar,
+.projects-detail::-webkit-scrollbar {
+    width: 8px;
+}
+
+.window-body::-webkit-scrollbar-thumb,
+.about-content::-webkit-scrollbar-thumb,
+.projects-detail::-webkit-scrollbar-thumb {
+    background: rgba(255, 255, 255, 0.2);
+    border-radius: 4px;
+}
+
+.window-body::-webkit-scrollbar-thumb:hover,
+.about-content::-webkit-scrollbar-thumb:hover,
+.projects-detail::-webkit-scrollbar-thumb:hover {
+    background: rgba(233, 84, 32, 0.5);
+}
+
+/* ==========================================================================
+   APP 1: ABOUT JAMAL
+   ========================================================================== */
+.ubuntu-about-window {
+    display: flex;
+    height: 100%;
+}
+
+.about-nav {
+    width: 200px;
+    background-color: #1f1f1f;
+    border-right: 1px solid var(--ubuntu-gray-border);
+    padding: 14px 10px;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.about-nav-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 10px 14px;
+    background: transparent;
+    border: none;
+    border-radius: 6px;
+    color: var(--ubuntu-text-main);
+    font-size: 13px;
+    font-weight: 500;
+    cursor: pointer;
+    text-align: left;
+    transition: background 0.15s ease, color 0.15s ease;
+}
+
+.about-nav-item i {
+    width: 18px;
+    text-align: center;
+    font-size: 14px;
+    color: var(--ubuntu-text-muted);
+}
+
+.about-nav-item:hover {
+    background: rgba(255, 255, 255, 0.08);
+}
+
+.about-nav-item.active {
+    background: var(--ubuntu-orange);
+    color: #ffffff;
+}
+
+.about-nav-item.active i {
+    color: #ffffff;
+}
+
+.about-content {
+    flex: 1;
+    padding: 24px 28px;
+    overflow-y: auto;
+}
+
+.tab-pane {
+    display: none;
+    animation: fadeIn 0.2s ease-in;
+}
+
+.tab-pane.active {
+    display: block;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(4px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+/* Bio Hero */
+.bio-hero {
+    display: flex;
+    gap: 24px;
+    align-items: center;
+    padding-bottom: 22px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+    margin-bottom: 20px;
+}
+
+.bio-avatar {
+    width: 110px;
+    height: 110px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 3px solid var(--ubuntu-orange);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
+}
+
+.bio-hero-info h2 {
+    font-size: 24px;
+    color: var(--ubuntu-text-bright);
+    margin-bottom: 6px;
+}
+
+.role-badge {
+    color: #f0a37e;
+    font-size: 13px;
+    font-weight: 500;
+    margin-bottom: 6px;
+}
+
+.location-badge {
+    color: var(--ubuntu-text-muted);
+    font-size: 12px;
+    margin-bottom: 14px;
+}
+
+.bio-actions {
+    display: flex;
+    gap: 12px;
+}
+
+.btn-ubuntu-primary {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: var(--ubuntu-orange);
+    color: #ffffff;
+    text-decoration: none;
+    padding: 8px 14px;
+    border-radius: 5px;
+    font-size: 12px;
+    font-weight: 500;
+    transition: background 0.15s ease;
+    border: none;
+    cursor: pointer;
+}
+
+.btn-ubuntu-primary:hover {
+    background: #d64716;
+}
+
+.btn-ubuntu-secondary {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: rgba(255, 255, 255, 0.1);
+    color: var(--ubuntu-text-bright);
+    padding: 8px 14px;
+    border-radius: 5px;
+    font-size: 12px;
+    font-weight: 500;
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    cursor: pointer;
+    transition: background 0.15s ease;
+}
+
+.btn-ubuntu-secondary:hover {
+    background: rgba(255, 255, 255, 0.2);
+}
+
+.bio-description h3,
+.tab-pane > h3 {
+    font-size: 16px;
+    color: var(--ubuntu-text-bright);
+    margin-bottom: 12px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.bio-description h3 i,
+.tab-pane > h3 i {
+    color: var(--ubuntu-orange);
+}
+
+.bio-description p {
+    font-size: 13px;
+    line-height: 1.6;
+    color: var(--ubuntu-text-main);
+    margin-bottom: 12px;
+}
+
+.bio-meta-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 12px;
+    margin-top: 18px;
+}
+
+.meta-card {
+    background: var(--ubuntu-card-bg);
+    border: 1px solid var(--ubuntu-gray-border);
+    padding: 10px 14px;
+    border-radius: 6px;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.meta-label {
+    font-size: 11px;
+    color: var(--ubuntu-text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.meta-val {
+    font-size: 13px;
+    color: var(--ubuntu-text-bright);
+    font-weight: 500;
+}
+
+.meta-val.available {
+    color: var(--ubuntu-green);
+}
+
+/* Skills Cards */
+.skills-category-group {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 16px;
+    margin-top: 14px;
+}
+
+.skill-group-card {
+    background: var(--ubuntu-card-bg);
+    border: 1px solid var(--ubuntu-gray-border);
+    border-radius: 6px;
+    padding: 14px;
+}
+
+.skill-group-title {
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--ubuntu-text-bright);
+    margin-bottom: 12px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.skill-group-title i {
+    color: var(--ubuntu-orange);
+}
+
+.skill-chips {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+}
+
+.chip {
+    background: var(--ubuntu-chip-bg);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    color: var(--ubuntu-text-main);
+    padding: 4px 10px;
+    border-radius: 4px;
+    font-size: 12px;
+    transition: border-color 0.15s ease, background 0.15s ease;
+}
+
+.chip:hover {
+    background: rgba(233, 84, 32, 0.2);
+    border-color: var(--ubuntu-orange);
+    color: #ffffff;
+}
+
+/* Timeline Education */
+.timeline {
+    position: relative;
+    padding-left: 28px;
+    margin-top: 18px;
+}
+
+.timeline::before {
+    content: '';
+    position: absolute;
+    left: 8px;
+    top: 6px;
+    bottom: 6px;
+    width: 2px;
+    background: rgba(255, 255, 255, 0.15);
+}
+
+.timeline-item {
+    position: relative;
+    margin-bottom: 22px;
+}
+
+.timeline-badge {
+    position: absolute;
+    left: -28px;
+    top: 0;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    background: var(--ubuntu-orange);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 10px;
+    color: #ffffff;
+}
+
+.timeline-content h4 {
+    font-size: 14px;
+    color: var(--ubuntu-text-bright);
+    margin-bottom: 4px;
+}
+
+.timeline-sub {
+    font-size: 12px;
+    color: var(--ubuntu-text-muted);
+    margin-bottom: 6px;
+}
+
+.timeline-content p {
+    font-size: 12.5px;
+    color: var(--ubuntu-text-main);
+    line-height: 1.5;
+}
+
+/* Contact Grid */
+.contact-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 14px;
+    margin-top: 18px;
+}
+
+.contact-card {
+    background: var(--ubuntu-card-bg);
+    border: 1px solid var(--ubuntu-gray-border);
+    border-radius: 6px;
+    padding: 14px;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    text-decoration: none;
+    color: inherit;
+    transition: background 0.15s ease, border-color 0.15s ease;
+}
+
+.contact-card:hover {
+    background: #333333;
+    border-color: var(--ubuntu-orange);
+}
+
+.contact-icon {
+    width: 38px;
+    height: 38px;
+    border-radius: 50%;
+    background: rgba(233, 84, 32, 0.15);
+    color: var(--ubuntu-orange);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 16px;
+}
+
+.contact-info {
+    display: flex;
+    flex-direction: column;
+}
+
+.contact-title {
+    font-size: 11px;
+    color: var(--ubuntu-text-muted);
+    text-transform: uppercase;
+}
+
+.contact-detail {
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--ubuntu-text-bright);
+}
+
+/* ==========================================================================
+   APP 2: PROJECTS WINDOW
+   ========================================================================== */
+.projects-window {
+    display: flex;
+    height: 100%;
+}
+
+.projects-sidebar {
+    width: 250px;
+    background-color: #1e1e1e;
+    border-right: 1px solid var(--ubuntu-gray-border);
+    padding: 14px 10px;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.projects-sidebar-heading {
+    font-size: 11px;
+    font-weight: 700;
+    color: var(--ubuntu-text-muted);
+    letter-spacing: 0.6px;
+    padding: 4px 10px 8px;
+}
+
+.proj-nav-btn {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 10px 12px;
+    background: transparent;
+    border: none;
+    border-radius: 6px;
+    color: var(--ubuntu-text-main);
+    text-align: left;
+    cursor: pointer;
+    transition: background 0.15s ease;
+}
+
+.proj-nav-btn i {
+    font-size: 16px;
+    color: var(--ubuntu-orange);
+}
+
+.proj-nav-text {
+    display: flex;
+    flex-direction: column;
+}
+
+.proj-nav-name {
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--ubuntu-text-bright);
+}
+
+.proj-nav-sub {
+    font-size: 11px;
+    color: var(--ubuntu-text-muted);
+}
+
+.proj-nav-btn:hover {
+    background: rgba(255, 255, 255, 0.08);
+}
+
+.proj-nav-btn.active {
+    background: rgba(233, 84, 32, 0.25);
+    border: 1px solid rgba(233, 84, 32, 0.5);
+}
+
+.projects-detail {
+    flex: 1;
+    padding: 24px 28px;
+    overflow-y: auto;
+}
+
+.proj-card {
+    display: none;
+    animation: fadeIn 0.2s ease-in;
+}
+
+.proj-card.active {
+    display: block;
+}
+
+.proj-header-banner {
+    padding-bottom: 18px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+    margin-bottom: 18px;
+}
+
+.proj-tag {
+    display: inline-block;
+    font-size: 11px;
+    text-transform: uppercase;
+    font-weight: 600;
+    background: rgba(233, 84, 32, 0.2);
+    color: #ff8e63;
+    padding: 3px 8px;
+    border-radius: 4px;
+    margin-bottom: 8px;
+}
+
+.proj-header-banner h2 {
+    font-size: 22px;
+    color: var(--ubuntu-text-bright);
+    margin-bottom: 8px;
+}
+
+.proj-summary {
+    font-size: 13.5px;
+    color: var(--ubuntu-text-main);
+    line-height: 1.5;
+}
+
+.proj-body h3 {
+    font-size: 15px;
+    color: var(--ubuntu-text-bright);
+    margin: 18px 0 10px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.proj-body h3 i {
+    color: var(--ubuntu-orange);
+}
+
+.proj-body p {
+    font-size: 13px;
+    line-height: 1.6;
+    color: var(--ubuntu-text-main);
+    margin-bottom: 14px;
+}
+
+.tech-stack-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin: 14px 0 20px;
+}
+
+.badge-tech {
+    background: #1d1d1d;
+    border: 1px solid var(--ubuntu-gray-border);
+    padding: 5px 10px;
+    border-radius: 4px;
+    font-size: 12px;
+    color: #e5e5e5;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.badge-tech i {
+    color: var(--ubuntu-orange);
+}
+
+.key-points {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-top: 14px;
+}
+
+.kp-item {
+    background: var(--ubuntu-card-bg);
+    border: 1px solid var(--ubuntu-gray-border);
+    padding: 12px 14px;
+    border-radius: 6px;
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    font-size: 12.5px;
+    line-height: 1.5;
+}
+
+.kp-item i {
+    font-size: 16px;
+    color: var(--ubuntu-green);
+    margin-top: 2px;
+}
+
+/* ==========================================================================
+   APP 3: TERMINAL WINDOW
+   ========================================================================== */
+.terminal-body {
+    background-color: #300a24;
+    color: #ffffff;
+    font-family: 'Ubuntu Mono', monospace;
+    padding: 14px;
+    font-size: 14px;
+    line-height: 1.45;
+    height: 100%;
+    overflow-y: auto;
+    cursor: text;
+}
+
+.terminal-line {
+    margin-bottom: 3px;
+    word-break: break-all;
+}
+
+.terminal-line.banner {
+    color: #e95420;
+    font-weight: 700;
+}
+
+.terminal-line.info {
+    color: #cccccc;
+}
+
+.terminal-line.system {
+    color: #73d216;
+}
+
+.term-highlight {
+    color: #fce94f;
+    font-weight: 700;
+}
+
+.terminal-input-row {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.term-prompt {
+    font-weight: 700;
+    white-space: nowrap;
+}
+
+.prompt-user {
+    color: #4af626;
+}
+
+.prompt-dir {
+    color: #34e2e2;
+}
+
+#terminalInput {
+    flex: 1;
+    background: transparent;
+    border: none;
+    outline: none;
+    color: #ffffff;
+    font-family: 'Ubuntu Mono', monospace;
+    font-size: 14px;
+    caret-color: #ffffff;
+}
+
+/* ==========================================================================
+   APP 4: RESUME VIEWER
+   ========================================================================== */
+.resume-body {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    background-color: #1e1e1e;
+}
+
+.resume-toolbar {
+    height: 42px;
+    background-color: #2b2b2b;
+    border-bottom: 1px solid var(--ubuntu-gray-border);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 16px;
+}
+
+.doc-info {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 13px;
+    font-weight: 500;
+}
+
+.text-red {
+    color: #e95420;
+}
+
+.toolbar-actions {
+    display: flex;
+    gap: 8px;
+}
+
+.btn-tool {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 5px 10px;
+    border-radius: 4px;
+    background: rgba(255, 255, 255, 0.1);
+    color: #ffffff;
+    text-decoration: none;
+    font-size: 12px;
+    transition: background 0.15s ease;
+}
+
+.btn-tool:hover {
+    background: rgba(255, 255, 255, 0.2);
+}
+
+.btn-tool.primary {
+    background: var(--ubuntu-orange);
+}
+
+.btn-tool.primary:hover {
+    background: #d64716;
+}
+
+.resume-frame-wrapper {
+    flex: 1;
+    width: 100%;
+    height: calc(100% - 42px);
+    background: #525659;
+}
+
+.resume-iframe {
+    width: 100%;
+    height: 100%;
+    border: none;
+}
+
+/* ==========================================================================
+   APP 5: SETTINGS WINDOW
+   ========================================================================== */
+.settings-body {
+    padding: 24px;
+}
+
+.settings-body h3 {
+    font-size: 15px;
+    color: #ffffff;
+    margin-bottom: 6px;
+}
+
+.settings-hint {
+    font-size: 12px;
+    color: var(--ubuntu-text-muted);
+    margin-bottom: 16px;
+}
+
+.wallpapers-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 12px;
+    margin-bottom: 24px;
+}
+
+.wall-thumb {
+    width: 100%;
+    height: 90px;
+    border-radius: 6px;
+    overflow: hidden;
+    cursor: pointer;
+    border: 2px solid transparent;
+    transition: transform 0.15s ease, border-color 0.15s ease;
+}
+
+.wall-thumb img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.wall-thumb:hover {
+    transform: scale(1.03);
+}
+
+.wall-thumb.active {
+    border-color: var(--ubuntu-orange);
+}
+
+.settings-divider {
+    height: 1px;
+    background: rgba(255, 255, 255, 0.1);
+    margin: 20px 0;
+}
+
+.system-specs {
+    background: var(--ubuntu-card-bg);
+    border: 1px solid var(--ubuntu-gray-border);
+    border-radius: 6px;
+    padding: 14px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    font-size: 13px;
+}
+
+.spec-row {
+    display: flex;
+    justify-content: space-between;
+}
+
+.spec-row span {
+    color: var(--ubuntu-text-muted);
+}
+
+/* ==========================================================================
+   APP 6: TRASH WINDOW
+   ========================================================================== */
+.trash-body {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+}
+
+.trash-empty-state {
+    text-align: center;
+    padding: 20px;
+}
+
+.trash-main {
+    font-size: 16px;
+    font-weight: 500;
+    margin: 12px 0 6px;
+    color: var(--ubuntu-text-bright);
+}
+
+.trash-sub {
+    font-size: 12px;
+    color: var(--ubuntu-text-muted);
+    max-width: 320px;
+}
+
+/* ==========================================================================
+   RESPONSIVE DESIGN (Tablets & Mobile)
+   ========================================================================== */
+@media (max-width: 768px) {
+    .dock {
+        width: 48px;
+    }
+    
+    .windows-container {
+        left: 48px;
+    }
+
+    .window {
+        width: calc(100vw - 52px) !important;
+        height: calc(100vh - 36px) !important;
+        top: 4px !important;
+        left: 2px !important;
+        min-width: unset;
+    }
+
+    .ubuntu-about-window, .projects-window {
+        flex-direction: column;
+    }
+
+    .about-nav, .projects-sidebar {
+        width: 100%;
+        border-right: none;
+        border-bottom: 1px solid var(--ubuntu-gray-border);
+        flex-direction: row;
+        overflow-x: auto;
+    }
+
+    .skills-category-group, .bio-meta-grid, .contact-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .wallpapers-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}

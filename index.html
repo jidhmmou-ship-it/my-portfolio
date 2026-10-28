@@ -1,0 +1,626 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Jamal Idhammou - Ubuntu 20.04 Desktop</title>
+    <meta name="description" content="Jamal Idhammou's Ubuntu 20.04 Web Desktop Portfolio - Digital Infrastructure & Cybersecurity Specialist">
+    <link rel="icon" type="image/png" href="themes/Yaru/system/user-home.png">
+    
+    <!-- Ubuntu Font & FontAwesome Icons -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Ubuntu:ital,wght@0,300;0,400;0,500;0,700;1,400&family=Ubuntu+Mono:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    
+    <link rel="stylesheet" href="style.css">
+</head>
+<body class="theme-default">
+
+    <!-- Top Navigation Bar -->
+    <header class="top-bar" id="topBar">
+        <div class="top-bar-left">
+            <span class="activities-btn" id="activitiesBtn">Activities</span>
+        </div>
+        <div class="top-bar-center">
+            <span class="clock" id="topClock">Oct 28 00:00</span>
+        </div>
+        <div class="top-bar-right">
+            <div class="status-cluster" id="statusCluster" tabindex="0" role="button" aria-label="System status menu">
+                <i class="fa-solid fa-network-wired" title="Ethernet Connected"></i>
+                <i class="fa-solid fa-volume-high" title="Volume 100%"></i>
+                <i class="fa-solid fa-battery-full" title="Battery 100%"></i>
+                <i class="fa-solid fa-caret-down status-arrow"></i>
+            </div>
+            
+            <!-- Status Dropdown Menu -->
+            <div class="status-dropdown" id="statusDropdown">
+                <div class="dropdown-row">
+                    <i class="fa-solid fa-volume-high"></i>
+                    <input type="range" min="0" max="100" value="80" class="slider" aria-label="Sound volume">
+                </div>
+                <div class="dropdown-row">
+                    <i class="fa-solid fa-sun"></i>
+                    <input type="range" min="10" max="100" value="100" class="slider" aria-label="Screen brightness">
+                </div>
+                <div class="dropdown-divider"></div>
+                <div class="dropdown-item">
+                    <i class="fa-solid fa-wifi"></i>
+                    <span>ISTA-Assaka-Secure</span>
+                    <span class="pill-active">Connected</span>
+                </div>
+                <div class="dropdown-item" onclick="openApp('settings')">
+                    <i class="fa-solid fa-sliders"></i>
+                    <span>System Settings</span>
+                </div>
+                <div class="dropdown-divider"></div>
+                <div class="dropdown-item" onclick="openApp('terminal')">
+                    <i class="fa-solid fa-terminal"></i>
+                    <span>Terminal Shell</span>
+                </div>
+                <div class="dropdown-item" onclick="window.location.reload()">
+                    <i class="fa-solid fa-arrow-rotate-right"></i>
+                    <span>Restart Desktop</span>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Desktop Workspace -->
+    <main class="desktop-screen" id="desktopScreen">
+        
+        <!-- Ubuntu Left Dock -->
+        <aside class="dock" id="dock" aria-label="Ubuntu application dock">
+            <div class="dock-apps">
+                <button class="dock-icon" data-app="about" title="About Jamal">
+                    <img src="themes/Yaru/system/user-home.png" alt="About Jamal">
+                    <span class="dock-indicator"></span>
+                </button>
+                <button class="dock-icon" data-app="terminal" title="Terminal">
+                    <img src="themes/Yaru/apps/bash.png" alt="Terminal">
+                    <span class="dock-indicator"></span>
+                </button>
+                <button class="dock-icon" data-app="projects" title="Projects & Engineering">
+                    <img src="themes/Yaru/apps/vscode.png" alt="Projects">
+                    <span class="dock-indicator"></span>
+                </button>
+                <button class="dock-icon" data-app="resume" title="CV Resume Viewer">
+                    <img src="themes/Yaru/apps/gedit.png" alt="CV Resume">
+                    <span class="dock-indicator"></span>
+                </button>
+                <button class="dock-icon" data-app="settings" title="Settings">
+                    <img src="themes/Yaru/apps/gnome-control-center.png" alt="Settings">
+                    <span class="dock-indicator"></span>
+                </button>
+                <button class="dock-icon" data-app="trash" title="Trash">
+                    <img src="themes/Yaru/system/user-trash.png" alt="Trash">
+                    <span class="dock-indicator"></span>
+                </button>
+            </div>
+            
+            <div class="dock-bottom">
+                <button class="dock-icon grid-icon" id="allAppsBtn" title="Show Applications">
+                    <svg viewBox="0 0 24 24" width="22" height="22" fill="#fff">
+                        <circle cx="5" cy="5" r="2.2"/>
+                        <circle cx="12" cy="5" r="2.2"/>
+                        <circle cx="19" cy="5" r="2.2"/>
+                        <circle cx="5" cy="12" r="2.2"/>
+                        <circle cx="12" cy="12" r="2.2"/>
+                        <circle cx="19" cy="12" r="2.2"/>
+                        <circle cx="5" cy="19" r="2.2"/>
+                        <circle cx="12" cy="19" r="2.2"/>
+                        <circle cx="19" cy="19" r="2.2"/>
+                    </svg>
+                </button>
+            </div>
+        </aside>
+
+        <!-- Desktop Shortcuts -->
+        <div class="desktop-grid" id="desktopGrid">
+            <div class="desktop-item" tabindex="0" data-app="about">
+                <img src="themes/Yaru/system/user-home.png" alt="About Jamal">
+                <span>About Jamal</span>
+            </div>
+            <div class="desktop-item" tabindex="0" data-app="projects">
+                <img src="themes/Yaru/apps/vscode.png" alt="Projects">
+                <span>Projects</span>
+            </div>
+            <div class="desktop-item" tabindex="0" data-app="terminal">
+                <img src="themes/Yaru/apps/bash.png" alt="Terminal">
+                <span>Terminal</span>
+            </div>
+            <div class="desktop-item" tabindex="0" data-app="resume">
+                <img src="themes/Yaru/apps/gedit.png" alt="Resume">
+                <span>Resume.pdf</span>
+            </div>
+            <div class="desktop-item" tabindex="0" data-app="trash">
+                <img src="themes/Yaru/system/user-trash.png" alt="Trash">
+                <span>Trash</span>
+            </div>
+        </div>
+
+        <!-- ==================== WINDOWS CONTAINER ==================== -->
+        <div class="windows-container" id="windowsContainer">
+
+            <!-- 1. ABOUT ME WINDOW -->
+            <div class="window active" id="win-about" data-app="about" style="top: 50px; left: 100px; width: 880px; height: 560px;">
+                <div class="window-header">
+                    <div class="window-controls">
+                        <button class="win-btn win-close" title="Close" onclick="closeApp('about')"></button>
+                        <button class="win-btn win-minimize" title="Minimize" onclick="minimizeApp('about')"></button>
+                        <button class="win-btn win-maximize" title="Maximize" onclick="maximizeApp('about')"></button>
+                    </div>
+                    <div class="window-title">Jamal Idhammou - About System</div>
+                </div>
+                <div class="window-body ubuntu-about-window">
+                    <div class="about-nav">
+                        <button class="about-nav-item active" data-tab="tab-bio">
+                            <i class="fa-solid fa-user"></i> <span>Overview</span>
+                        </button>
+                        <button class="about-nav-item" data-tab="tab-skills">
+                            <i class="fa-solid fa-shield-halved"></i> <span>Tech & Security</span>
+                        </button>
+                        <button class="about-nav-item" data-tab="tab-education">
+                            <i class="fa-solid fa-graduation-cap"></i> <span>Education</span>
+                        </button>
+                        <button class="about-nav-item" data-tab="tab-contact">
+                            <i class="fa-solid fa-envelope"></i> <span>Get In Touch</span>
+                        </button>
+                    </div>
+                    <div class="about-content">
+                        
+                        <!-- TAB 1: BIO -->
+                        <div class="tab-pane active" id="tab-bio">
+                            <div class="bio-hero">
+                                <img src="profile-photo.png" alt="Jamal Idhammou" class="bio-avatar">
+                                <div class="bio-hero-info">
+                                    <h2>Jamal Idhammou</h2>
+                                    <p class="role-badge"><i class="fa-solid fa-terminal"></i> Digital Infrastructure Specialist (Systems & Networks) | Cybersecurity Enthusiast</p>
+                                    <p class="location-badge"><i class="fa-solid fa-location-dot"></i> Agadir, Morocco &bull; ISTA Assaka</p>
+                                    <div class="bio-actions">
+                                        <a href="CV_Jamal_Idhammou.pdf" download class="btn-ubuntu-primary">
+                                            <i class="fa-solid fa-download"></i> Download CV (PDF)
+                                        </a>
+                                        <button class="btn-ubuntu-secondary" onclick="openApp('terminal')">
+                                            <i class="fa-solid fa-terminal"></i> Open Terminal
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="bio-description">
+                                <h3><i class="fa-solid fa-quote-left"></i> Profile Summary</h3>
+                                <p>
+                                    Dedicated and detail-oriented Digital Infrastructure student specializing in <strong>Systems, Networks & IT Security</strong> at <strong>ISTA Assaka</strong>. Passionate about architecting resilient enterprise network topologies, hardening operating environments (Linux & Windows Server), virtualization, ethical pentesting, and automated systems using Python and Shell scripting.
+                                </p>
+                                <p>
+                                    Proactive in diagnosing hardware, configuring routing protocols, handling administrative workflows, and engineering embedded IoT and assistive systems.
+                                </p>
+                            </div>
+                            <div class="bio-meta-grid">
+                                <div class="meta-card">
+                                    <span class="meta-label">Domain</span>
+                                    <span class="meta-val">Digital Infrastructure & Cybersecurity</span>
+                                </div>
+                                <div class="meta-card">
+                                    <span class="meta-label">Institution</span>
+                                    <span class="meta-val">ISTA Assaka, Agadir</span>
+                                </div>
+                                <div class="meta-card">
+                                    <span class="meta-label">Languages</span>
+                                    <span class="meta-val">English (B2 Fluent), Arabic, Tamazight, French</span>
+                                </div>
+                                <div class="meta-card">
+                                    <span class="meta-label">Status</span>
+                                    <span class="meta-val available">Available for Internships & Projects</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- TAB 2: SKILLS -->
+                        <div class="tab-pane" id="tab-skills">
+                            <h3><i class="fa-solid fa-shield-halved"></i> Technical Competencies</h3>
+                            <div class="skills-category-group">
+                                <div class="skill-group-card">
+                                    <div class="skill-group-title">
+                                        <i class="fa-solid fa-network-wired"></i> Networks & Protocols
+                                    </div>
+                                    <div class="skill-chips">
+                                        <span class="chip">TCP/IP Suite</span>
+                                        <span class="chip">LAN / WAN Architecture</span>
+                                        <span class="chip">Cisco Packet Tracer</span>
+                                        <span class="chip">Wireshark Traffic Analysis</span>
+                                        <span class="chip">VLANs & Subnetting</span>
+                                        <span class="chip">Routing (OSPF, RIP, Static)</span>
+                                        <span class="chip">DNS & DHCP Services</span>
+                                    </div>
+                                </div>
+
+                                <div class="skill-group-card">
+                                    <div class="skill-group-title">
+                                        <i class="fa-solid fa-server"></i> Systems & Virtualization
+                                    </div>
+                                    <div class="skill-chips">
+                                        <span class="chip">Linux (Ubuntu, Kali, Debian)</span>
+                                        <span class="chip">Windows Server (AD DS, GPO)</span>
+                                        <span class="chip">VMware Workstation / ESXi</span>
+                                        <span class="chip">Oracle VirtualBox</span>
+                                        <span class="chip">System Hardening</span>
+                                        <span class="chip">SSH & Remote Administration</span>
+                                    </div>
+                                </div>
+
+                                <div class="skill-group-card">
+                                    <div class="skill-group-title">
+                                        <i class="fa-solid fa-key"></i> Cybersecurity & Defense
+                                    </div>
+                                    <div class="skill-chips">
+                                        <span class="chip">Ethical Hacking & Pentesting</span>
+                                        <span class="chip">Network Security Auditing</span>
+                                        <span class="chip">Nmap & Port Reconnaissance</span>
+                                        <span class="chip">Firewall Configuration</span>
+                                        <span class="chip">Vulnerability Assessment</span>
+                                    </div>
+                                </div>
+
+                                <div class="skill-group-card">
+                                    <div class="skill-group-title">
+                                        <i class="fa-solid fa-code"></i> Scripting & Embedded IoT
+                                    </div>
+                                    <div class="skill-chips">
+                                        <span class="chip">Python 3</span>
+                                        <span class="chip">Bash & Shell Automation</span>
+                                        <span class="chip">ESP32 & Microcontroller IoT</span>
+                                        <span class="chip">Git & Version Control</span>
+                                        <span class="chip">Hardware Diagnostics</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- TAB 3: EDUCATION -->
+                        <div class="tab-pane" id="tab-education">
+                            <h3><i class="fa-solid fa-graduation-cap"></i> Academic Background</h3>
+                            <div class="timeline">
+                                <div class="timeline-item">
+                                    <div class="timeline-badge"><i class="fa-solid fa-building-columns"></i></div>
+                                    <div class="timeline-content">
+                                        <h4>Specialized Technician in Digital Infrastructure (Systems & Networks)</h4>
+                                        <p class="timeline-sub">ISTA Assaka, Agadir | <strong>2025 - Present</strong></p>
+                                        <p>Comprehensive training in corporate computer networks, multi-platform server administration (Windows Server & Linux), cloud fundamentals, virtualization infrastructure, enterprise cybersecurity, and automated operations.</p>
+                                    </div>
+                                </div>
+
+                                <div class="timeline-item">
+                                    <div class="timeline-badge"><i class="fa-solid fa-award"></i></div>
+                                    <div class="timeline-content">
+                                        <h4>High School Baccalaureate in Physics-Chemistry</h4>
+                                        <p class="timeline-sub">Lyc&eacute;e Qualifiant Koutoubia, Drarga | <strong>Class of 2025</strong></p>
+                                        <p>Analytical foundations in mathematics, physical sciences, logical reasoning, and scientific computing methodologies.</p>
+                                    </div>
+                                </div>
+
+                                <div class="timeline-item">
+                                    <div class="timeline-badge"><i class="fa-solid fa-briefcase"></i></div>
+                                    <div class="timeline-content">
+                                        <h4>Administrative Office Intern</h4>
+                                        <p class="timeline-sub">Car Rental Agency | <strong>Professional Internship</strong></p>
+                                        <p>Conducted daily IT workflow troubleshooting, operational database tracking, administrative paperwork organization, and customer support.</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- TAB 4: CONTACT -->
+                        <div class="tab-pane" id="tab-contact">
+                            <h3><i class="fa-solid fa-envelope"></i> Let's Connect</h3>
+                            <p>I am keen to collaborate on infrastructure administration, cybersecurity research, and network deployment projects.</p>
+                            
+                            <div class="contact-grid">
+                                <a href="mailto:jidhmmou@gmail.com" class="contact-card">
+                                    <div class="contact-icon"><i class="fa-solid fa-envelope-open-text"></i></div>
+                                    <div class="contact-info">
+                                        <span class="contact-title">Email</span>
+                                        <span class="contact-detail">jidhmmou@gmail.com</span>
+                                    </div>
+                                </a>
+
+                                <a href="tel:+212649144657" class="contact-card">
+                                    <div class="contact-icon"><i class="fa-solid fa-phone-volume"></i></div>
+                                    <div class="contact-info">
+                                        <span class="contact-title">Phone</span>
+                                        <span class="contact-detail">+212 649-144657</span>
+                                    </div>
+                                </a>
+
+                                <a href="https://github.com/jidhmmou-ship-it" target="_blank" rel="noopener noreferrer" class="contact-card">
+                                    <div class="contact-icon"><i class="fa-brands fa-github"></i></div>
+                                    <div class="contact-info">
+                                        <span class="contact-title">GitHub</span>
+                                        <span class="contact-detail">@jidhmmou-ship-it</span>
+                                    </div>
+                                </a>
+
+                                <div class="contact-card">
+                                    <div class="contact-icon"><i class="fa-solid fa-location-dot"></i></div>
+                                    <div class="contact-info">
+                                        <span class="contact-title">Location</span>
+                                        <span class="contact-detail">Agadir, Morocco</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+
+            <!-- 2. PROJECTS WINDOW -->
+            <div class="window" id="win-projects" data-app="projects" style="top: 75px; left: 160px; width: 920px; height: 580px;">
+                <div class="window-header">
+                    <div class="window-controls">
+                        <button class="win-btn win-close" title="Close" onclick="closeApp('projects')"></button>
+                        <button class="win-btn win-minimize" title="Minimize" onclick="minimizeApp('projects')"></button>
+                        <button class="win-btn win-maximize" title="Maximize" onclick="maximizeApp('projects')"></button>
+                    </div>
+                    <div class="window-title">Engineering Projects & Innovations - Jamal Idhammou</div>
+                </div>
+                <div class="window-body projects-window">
+                    <div class="projects-sidebar">
+                        <div class="projects-sidebar-heading">PROJECT REPOSITORIES</div>
+                        <button class="proj-nav-btn active" data-target="proj-voice">
+                            <i class="fa-solid fa-microphone-lines"></i>
+                            <div class="proj-nav-text">
+                                <span class="proj-nav-name">Voice Meaning Mapper</span>
+                                <span class="proj-nav-sub">AI Speech Assistance</span>
+                            </div>
+                        </button>
+                        <button class="proj-nav-btn" data-target="proj-esp32">
+                            <i class="fa-solid fa-microchip"></i>
+                            <div class="proj-nav-text">
+                                <span class="proj-nav-name">ESP32 IoT Systems</span>
+                                <span class="proj-nav-sub">Embedded Hardware & Telemetry</span>
+                            </div>
+                        </button>
+                        <button class="proj-nav-btn" data-target="proj-hackathon">
+                            <i class="fa-solid fa-trophy"></i>
+                            <div class="proj-nav-text">
+                                <span class="proj-nav-name">Tech for Hope Hackathon</span>
+                                <span class="proj-nav-sub">1st Edition (May 2026)</span>
+                            </div>
+                        </button>
+                        <button class="proj-nav-btn" data-target="proj-network">
+                            <i class="fa-solid fa-network-wired"></i>
+                            <div class="proj-nav-text">
+                                <span class="proj-nav-name">Enterprise Network Lab</span>
+                                <span class="proj-nav-sub">ISTA Assaka Topologies</span>
+                            </div>
+                        </button>
+                    </div>
+
+                    <div class="projects-detail">
+                        
+                        <!-- PROJECT 1: Voice Meaning Mapper -->
+                        <div class="proj-card active" id="proj-voice">
+                            <div class="proj-header-banner">
+                                <div class="proj-tag">AI & Assistive Tech</div>
+                                <h2>Voice Meaning Mapper</h2>
+                                <p class="proj-summary">A communication assistance system designed to interpret speech patterns and acoustic inputs for individuals experiencing communication difficulties or autism.</p>
+                            </div>
+                            <div class="proj-body">
+                                <h3><i class="fa-solid fa-layer-group"></i> Architecture & Engineering</h3>
+                                <p>
+                                    Architected to translate imprecise or atypical vocal cues into structured semantic expressions and clear audio-visual feedback. Features an offline-capable Python inference pipeline paired with local SQLite database logging for private, low-latency deployment.
+                                </p>
+                                <div class="tech-stack-row">
+                                    <span class="badge-tech"><i class="fa-brands fa-python"></i> Python 3</span>
+                                    <span class="badge-tech"><i class="fa-solid fa-wave-square"></i> Audio Signal Processing</span>
+                                    <span class="badge-tech"><i class="fa-solid fa-database"></i> SQLite</span>
+                                    <span class="badge-tech"><i class="fa-solid fa-microchip"></i> Embedded Controller Ready</span>
+                                </div>
+                                <div class="key-points">
+                                    <div class="kp-item">
+                                        <i class="fa-solid fa-shield-check"></i>
+                                        <div>
+                                            <strong>Zero Cloud Dependency:</strong> All processing is preserved on-premise to guarantee absolute user voice privacy and confidentiality.
+                                        </div>
+                                    </div>
+                                    <div class="kp-item">
+                                        <i class="fa-solid fa-gauge-high"></i>
+                                        <div>
+                                            <strong>Low-Latency Acoustic Inference:</strong> Optimized phonetic mapping tailored to assist individuals with speech impairments.
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- PROJECT 2: ESP32 IoT Systems -->
+                        <div class="proj-card" id="proj-esp32">
+                            <div class="proj-header-banner">
+                                <div class="proj-tag">Embedded Systems & IoT</div>
+                                <h2>ESP32 Smart IoT & Sensor Ecosystem</h2>
+                                <p class="proj-summary">Hardware-software telemetric node engineered around the ESP32-S3 microcontroller, integrating sensor capture, secure Wi-Fi transport, and headless Python backends.</p>
+                            </div>
+                            <div class="proj-body">
+                                <h3><i class="fa-solid fa-microchip"></i> Hardware Blueprint</h3>
+                                <p>
+                                    Implements microcontrollers interfacing with environmental telemetry, acoustic receivers, and wireless sockets. Built to evaluate IoT device security, encrypted telemetry communication over MQTT/HTTPS, and local automation triggers.
+                                </p>
+                                <div class="tech-stack-row">
+                                    <span class="badge-tech"><i class="fa-solid fa-microchip"></i> ESP32 / ESP32-S3</span>
+                                    <span class="badge-tech"><i class="fa-brands fa-python"></i> MicroPython / Python</span>
+                                    <span class="badge-tech"><i class="fa-solid fa-wifi"></i> 802.11b/g/n & BLE</span>
+                                    <span class="badge-tech"><i class="fa-solid fa-lock"></i> TLS Telemetry</span>
+                                </div>
+                                <div class="key-points">
+                                    <div class="kp-item">
+                                        <i class="fa-solid fa-network-wired"></i>
+                                        <div>
+                                            <strong>Network Hardening:</strong> Configured dedicated IoT VLAN isolation to defend parent LAN environments against unauthorized lateral movement.
+                                        </div>
+                                    </div>
+                                    <div class="kp-item">
+                                        <i class="fa-solid fa-bolt"></i>
+                                        <div>
+                                            <strong>Autonomous Failover:</strong> Local non-volatile memory buffering maintains telemetry consistency during network dropouts.
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- PROJECT 3: Hackathon -->
+                        <div class="proj-card" id="proj-hackathon">
+                            <div class="proj-header-banner">
+                                <div class="proj-tag">Hackathon & Innovation</div>
+                                <h2>Tech for Hope Hackathon 2026 (1st Edition)</h2>
+                                <p class="proj-summary">48-Hour intensive innovation challenge hosted at CNMH Agadir (May 15-16, 2026).</p>
+                            </div>
+                            <div class="proj-body">
+                                <h3><i class="fa-solid fa-trophy"></i> Achievement & Contributions</h3>
+                                <p>
+                                    Participated in a high-intensity hackathon dedicated to engineering assistive technologies for people with disabilities. Collaborated closely with a multidisciplinary team under rigid time constraints, contributing system architecture design, functional logic testing, and technical pitch delivery. Awarded an official certificate of distinction.
+                                </p>
+                                <div class="tech-stack-row">
+                                    <span class="badge-tech"><i class="fa-solid fa-users"></i> Team Leadership</span>
+                                    <span class="badge-tech"><i class="fa-solid fa-bolt"></i> Rapid Prototyping</span>
+                                    <span class="badge-tech"><i class="fa-solid fa-universal-access"></i> Assistive Tech</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- PROJECT 4: Network Labs -->
+                        <div class="proj-card" id="proj-network">
+                            <div class="proj-header-banner">
+                                <div class="proj-tag">Infrastructure & Defense</div>
+                                <h2>Enterprise Network Architecture & Virtualization Labs</h2>
+                                <p class="proj-summary">Production-grade LAN/WAN multi-site topology configurations and server virtualization at ISTA Assaka (2025 - 2026).</p>
+                            </div>
+                            <div class="proj-body">
+                                <h3><i class="fa-solid fa-network-wired"></i> Infrastructure Implementation</h3>
+                                <p>
+                                    Architected multi-subnet networks featuring inter-VLAN routing, NAT/PAT translation, ACL firewall rules, and fault-tolerant switching in Cisco Packet Tracer. Deployed virtualized enterprise environments with Windows Server 2022 (Active Directory, Group Policy, DNS, DHCP) and hardened Ubuntu / Kali Linux machines.
+                                </p>
+                                <div class="tech-stack-row">
+                                    <span class="badge-tech"><i class="fa-solid fa-network-wired"></i> Cisco Packet Tracer</span>
+                                    <span class="badge-tech"><i class="fa-brands fa-linux"></i> Ubuntu & Kali Linux</span>
+                                    <span class="badge-tech"><i class="fa-brands fa-windows"></i> Windows Server AD DS</span>
+                                    <span class="badge-tech"><i class="fa-solid fa-cube"></i> VMware & VirtualBox</span>
+                                    <span class="badge-tech"><i class="fa-solid fa-magnifying-glass"></i> Wireshark</span>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+
+            <!-- 3. TERMINAL WINDOW -->
+            <div class="window" id="win-terminal" data-app="terminal" style="top: 100px; left: 220px; width: 780px; height: 500px;">
+                <div class="window-header">
+                    <div class="window-controls">
+                        <button class="win-btn win-close" title="Close" onclick="closeApp('terminal')"></button>
+                        <button class="win-btn win-minimize" title="Minimize" onclick="minimizeApp('terminal')"></button>
+                        <button class="win-btn win-maximize" title="Maximize" onclick="maximizeApp('terminal')"></button>
+                    </div>
+                    <div class="window-title">jamal@ubuntu-assaka: ~</div>
+                </div>
+                <div class="window-body terminal-body" id="terminalBody" onclick="focusTerminalInput()">
+                    <div id="terminalOutput">
+                        <div class="terminal-line banner">Welcome to Jamal Idhammou's Ubuntu 20.04 LTS (GNU/Linux 5.15.0-generic x86_64)</div>
+                        <div class="terminal-line info">* Documentation: Digital Infrastructure & Cybersecurity Portfolio</div>
+                        <div class="terminal-line info">* Institution:   ISTA Assaka, Agadir, Morocco</div>
+                        <div class="terminal-line system">Type <span class="term-highlight">help</span> to view available commands.</div>
+                        <br>
+                    </div>
+                    <div class="terminal-input-row">
+                        <span class="term-prompt"><span class="prompt-user">jamal@ubuntu-assaka</span>:<span class="prompt-dir">~</span>$</span>
+                        <input type="text" id="terminalInput" autofocus spellcheck="false" autocomplete="off" aria-label="Terminal command prompt">
+                    </div>
+                </div>
+            </div>
+
+            <!-- 4. RESUME VIEWER WINDOW -->
+            <div class="window" id="win-resume" data-app="resume" style="top: 60px; left: 140px; width: 860px; height: 580px;">
+                <div class="window-header">
+                    <div class="window-controls">
+                        <button class="win-btn win-close" title="Close" onclick="closeApp('resume')"></button>
+                        <button class="win-btn win-minimize" title="Minimize" onclick="minimizeApp('resume')"></button>
+                        <button class="win-btn win-maximize" title="Maximize" onclick="maximizeApp('resume')"></button>
+                    </div>
+                    <div class="window-title">Document Viewer - CV_Jamal_Idhammou.pdf</div>
+                </div>
+                <div class="window-body resume-body">
+                    <div class="resume-toolbar">
+                        <div class="doc-info">
+                            <i class="fa-solid fa-file-pdf text-red"></i>
+                            <span>CV_Jamal_Idhammou.pdf</span>
+                        </div>
+                        <div class="toolbar-actions">
+                            <a href="CV_Jamal_Idhammou.pdf" target="_blank" class="btn-tool" title="Open in new tab">
+                                <i class="fa-solid fa-arrow-up-right-from-square"></i> Open Tab
+                            </a>
+                            <a href="CV_Jamal_Idhammou.pdf" download class="btn-tool primary" title="Download CV">
+                                <i class="fa-solid fa-download"></i> Download
+                            </a>
+                        </div>
+                    </div>
+                    <div class="resume-frame-wrapper">
+                        <iframe src="CV_Jamal_Idhammou.pdf#toolbar=1&navpanes=0" class="resume-iframe" title="Jamal Idhammou Resume PDF"></iframe>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 5. SETTINGS WINDOW -->
+            <div class="window" id="win-settings" data-app="settings" style="top: 80px; left: 180px; width: 720px; height: 480px;">
+                <div class="window-header">
+                    <div class="window-controls">
+                        <button class="win-btn win-close" title="Close" onclick="closeApp('settings')"></button>
+                        <button class="win-btn win-minimize" title="Minimize" onclick="minimizeApp('settings')"></button>
+                        <button class="win-btn win-maximize" title="Maximize" onclick="maximizeApp('settings')"></button>
+                    </div>
+                    <div class="window-title">Settings - Background & System</div>
+                </div>
+                <div class="window-body settings-body">
+                    <h3>Desktop Wallpaper</h3>
+                    <p class="settings-hint">Select a wallpaper to customize your desktop experience:</p>
+                    <div class="wallpapers-grid" id="wallpapersGrid">
+                        <!-- Populated via script.js -->
+                    </div>
+                    
+                    <div class="settings-divider"></div>
+                    <h3>System Information</h3>
+                    <div class="system-specs">
+                        <div class="spec-row"><span>OS Name:</span><strong>Ubuntu 20.04.6 LTS (Focal Fossa) Web Edition</strong></div>
+                        <div class="spec-row"><span>Specialist:</span><strong>Jamal Idhammou</strong></div>
+                        <div class="spec-row"><span>Academic Center:</span><strong>ISTA Assaka (Systems, Networks & Security)</strong></div>
+                        <div class="spec-row"><span>Kernel:</span><strong>Linux 5.15.0-91-generic (x86_64)</strong></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 6. TRASH WINDOW -->
+            <div class="window" id="win-trash" data-app="trash" style="top: 120px; left: 240px; width: 560px; height: 380px;">
+                <div class="window-header">
+                    <div class="window-controls">
+                        <button class="win-btn win-close" title="Close" onclick="closeApp('trash')"></button>
+                        <button class="win-btn win-minimize" title="Minimize" onclick="minimizeApp('trash')"></button>
+                        <button class="win-btn win-maximize" title="Maximize" onclick="maximizeApp('trash')"></button>
+                    </div>
+                    <div class="window-title">Trash</div>
+                </div>
+                <div class="window-body trash-body">
+                    <div class="trash-empty-state">
+                        <img src="themes/Yaru/system/user-trash.png" alt="Empty Trash" width="64">
+                        <p class="trash-main">Trash is Empty</p>
+                        <p class="trash-sub">Citation artifacts, unused dependencies, and zero-byte scripts have been purged.</p>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </main>
+
+    <script src="script.js"></script>
+</body>
+</html>
