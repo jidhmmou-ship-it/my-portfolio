@@ -526,6 +526,13 @@ ossyNMMMNyMMhsssssssssssssshmmmhssssssso   <span style="color: #34e2e2;">Project
 </pre>`;
             break;
 
+        case 'onlyoffice':
+        case 'office':
+        case 'docs':
+            openOfficeDocument('word');
+            res.innerHTML = `Launching ONLYOFFICE DocumentServer editor...`;
+            break;
+
         case '':
             return;
 
@@ -548,3 +555,58 @@ function escapeHTML(str) {
         }[tag] || tag)
     );
 }
+
+// ============================================================================
+// ONLYOFFICE DOCUMENT SERVER INTEGRATION
+// ============================================================================
+const officeMeta = {
+    word: { title: 'ONLYOFFICE Document Editor - Report.docx', file: 'Report.docx' },
+    cell: { title: 'ONLYOFFICE Spreadsheet Editor - Metrics.xlsx', file: 'Metrics.xlsx' },
+    slide: { title: 'ONLYOFFICE Presentation Editor - Pitch.pptx', file: 'Pitch.pptx' }
+};
+
+function openOfficeDocument(type) {
+    const meta = officeMeta[type] || officeMeta.word;
+    const win = document.getElementById('win-office');
+    const iframe = document.getElementById('officeEditorFrame');
+    const titleEl = document.getElementById('officeWindowTitle');
+
+    if (!win || !iframe) return;
+
+    titleEl.textContent = meta.title;
+    iframe.src = `editor.html?type=${encodeURIComponent(type)}`;
+
+    win.classList.remove('minimized');
+    win.classList.add('active');
+    focusApp('office');
+}
+
+function closeOfficeWindow() {
+    const win = document.getElementById('win-office');
+    const iframe = document.getElementById('officeEditorFrame');
+    if (!win) return;
+    win.classList.remove('active', 'focused', 'maximized');
+    if (iframe) iframe.src = 'about:blank';
+}
+
+function minimizeOfficeWindow() {
+    const win = document.getElementById('win-office');
+    if (win) win.classList.add('minimized');
+}
+
+function maximizeOfficeWindow() {
+    const win = document.getElementById('win-office');
+    if (win) win.classList.toggle('maximized');
+}
+
+// Hook office shortcuts on initialization
+document.addEventListener('DOMContentLoaded', () => {
+    document.querySelectorAll('.desktop-item[data-office]').forEach(item => {
+        const type = item.getAttribute('data-office');
+        item.addEventListener('dblclick', () => openOfficeDocument(type));
+        item.addEventListener('click', () => {
+            if (window.innerWidth <= 768) openOfficeDocument(type);
+        });
+    });
+});
+

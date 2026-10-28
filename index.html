@@ -133,6 +133,24 @@
                 <img src="themes/Yaru/apps/gedit.png" alt="Resume">
                 <span>Resume.pdf</span>
             </div>
+            <div class="desktop-item" tabindex="0" data-office="word" title="Double-click to open ONLYOFFICE Word">
+                <div class="office-icon-wrapper word">
+                    <i class="fa-solid fa-file-word"></i>
+                </div>
+                <span>Report.docx</span>
+            </div>
+            <div class="desktop-item" tabindex="0" data-office="cell" title="Double-click to open ONLYOFFICE Excel">
+                <div class="office-icon-wrapper excel">
+                    <i class="fa-solid fa-file-excel"></i>
+                </div>
+                <span>Metrics.xlsx</span>
+            </div>
+            <div class="desktop-item" tabindex="0" data-office="slide" title="Double-click to open ONLYOFFICE PowerPoint">
+                <div class="office-icon-wrapper powerpoint">
+                    <i class="fa-solid fa-file-powerpoint"></i>
+                </div>
+                <span>Pitch.pptx</span>
+            </div>
             <div class="desktop-item" tabindex="0" data-app="trash">
                 <img src="themes/Yaru/system/user-trash.png" alt="Trash">
                 <span>Trash</span>
@@ -615,6 +633,21 @@
                         <p class="trash-main">Trash is Empty</p>
                         <p class="trash-sub">Citation artifacts, unused dependencies, and zero-byte scripts have been purged.</p>
                     </div>
+                </div>
+            </div>
+
+            <!-- 7. ONLYOFFICE DOCUMENT SERVER WINDOW -->
+            <div class="window" id="win-office" data-app="office" style="top: 50px; left: 110px; width: 940px; height: 600px;">
+                <div class="window-header">
+                    <div class="window-controls">
+                        <button class="win-btn win-close" title="Close" onclick="closeOfficeWindow()"></button>
+                        <button class="win-btn win-minimize" title="Minimize" onclick="minimizeOfficeWindow()"></button>
+                        <button class="win-btn win-maximize" title="Maximize" onclick="maximizeOfficeWindow()"></button>
+                    </div>
+                    <div class="window-title" id="officeWindowTitle">ONLYOFFICE DocumentServer</div>
+                </div>
+                <div class="window-body office-window-body">
+                    <iframe id="officeEditorFrame" src="about:blank" title="ONLYOFFICE Document Frame" allowfullscreen></iframe>
                 </div>
             </div>
 
