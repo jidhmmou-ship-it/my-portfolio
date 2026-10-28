@@ -13,6 +13,10 @@
     <link href="https://fonts.googleapis.com/css2?family=Ubuntu:ital,wght@0,300;0,400;0,500;0,700;1,400&family=Ubuntu+Mono:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     
+    <!-- Client-Side Office Libraries (Quill Rich Text) -->
+    <link href="https://cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet">
+    <script src="https://cdn.quilljs.com/1.3.6/quill.min.js"></script>
+    
     <link rel="stylesheet" href="style.css">
 </head>
 <body class="theme-default">
@@ -133,19 +137,19 @@
                 <img src="themes/Yaru/apps/gedit.png" alt="Resume">
                 <span>Resume.pdf</span>
             </div>
-            <div class="desktop-item" tabindex="0" data-office="word" title="Double-click to open ONLYOFFICE Word">
+            <div class="desktop-item" tabindex="0" data-app="word" title="Double-click to open Word Document">
                 <div class="office-icon-wrapper word">
                     <i class="fa-solid fa-file-word"></i>
                 </div>
                 <span>Report.docx</span>
             </div>
-            <div class="desktop-item" tabindex="0" data-office="cell" title="Double-click to open ONLYOFFICE Excel">
+            <div class="desktop-item" tabindex="0" data-app="excel" title="Double-click to open Excel Spreadsheet">
                 <div class="office-icon-wrapper excel">
                     <i class="fa-solid fa-file-excel"></i>
                 </div>
                 <span>Metrics.xlsx</span>
             </div>
-            <div class="desktop-item" tabindex="0" data-office="slide" title="Double-click to open ONLYOFFICE PowerPoint">
+            <div class="desktop-item" tabindex="0" data-app="powerpoint" title="Double-click to open PowerPoint Slide">
                 <div class="office-icon-wrapper powerpoint">
                     <i class="fa-solid fa-file-powerpoint"></i>
                 </div>
@@ -636,7 +640,95 @@
                 </div>
             </div>
 
-            <!-- 7. ONLYOFFICE DOCUMENT SERVER WINDOW -->
+            <!-- 7. WORD PROCESSOR APP -->
+            <div class="window" id="win-word" data-app="word" style="top: 55px; left: 110px; width: 880px; height: 580px;">
+                <div class="window-header">
+                    <div class="window-controls">
+                        <button class="win-btn win-close" title="Close" onclick="closeApp('word')"></button>
+                        <button class="win-btn win-minimize" title="Minimize" onclick="minimizeApp('word')"></button>
+                        <button class="win-btn win-maximize" title="Maximize" onclick="maximizeApp('word')"></button>
+                    </div>
+                    <div class="window-title">Document Editor (Word) - Report.docx</div>
+                </div>
+                <div class="window-body office-app-body">
+                    <div class="office-toolbar">
+                        <div class="office-app-tag word"><i class="fa-solid fa-file-word"></i> Word</div>
+                        <div class="office-actions">
+                            <button class="btn-office" onclick="resetWordDoc()"><i class="fa-solid fa-file"></i> New</button>
+                            <button class="btn-office primary" onclick="exportWordDoc()"><i class="fa-solid fa-download"></i> Save / Export HTML</button>
+                        </div>
+                    </div>
+                    <div class="editor-container word-canvas">
+                        <div id="quillEditor"></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 8. EXCEL SPREADSHEET APP -->
+            <div class="window" id="win-excel" data-app="excel" style="top: 75px; left: 140px; width: 920px; height: 580px;">
+                <div class="window-header">
+                    <div class="window-controls">
+                        <button class="win-btn win-close" title="Close" onclick="closeApp('excel')"></button>
+                        <button class="win-btn win-minimize" title="Minimize" onclick="minimizeApp('excel')"></button>
+                        <button class="win-btn win-maximize" title="Maximize" onclick="maximizeApp('excel')"></button>
+                    </div>
+                    <div class="window-title">Spreadsheet (Excel) - Metrics.xlsx</div>
+                </div>
+                <div class="window-body office-app-body">
+                    <div class="office-toolbar">
+                        <div class="office-app-tag excel"><i class="fa-solid fa-file-excel"></i> Excel</div>
+                        <div class="excel-formula-bar">
+                            <span class="formula-label">fx</span>
+                            <input type="text" id="excelFormulaInput" placeholder="Formula or value..." readonly>
+                        </div>
+                        <div class="office-actions">
+                            <button class="btn-office" onclick="addExcelRow()"><i class="fa-solid fa-plus"></i> Add Row</button>
+                            <button class="btn-office primary" onclick="exportExcelCsv()"><i class="fa-solid fa-file-csv"></i> Export CSV</button>
+                        </div>
+                    </div>
+                    <div class="excel-grid-container" id="excelGridContainer">
+                        <!-- Rendered dynamically by script.js -->
+                    </div>
+                </div>
+            </div>
+
+            <!-- 9. POWERPOINT SLIDE APP -->
+            <div class="window" id="win-powerpoint" data-app="powerpoint" style="top: 95px; left: 170px; width: 940px; height: 590px;">
+                <div class="window-header">
+                    <div class="window-controls">
+                        <button class="win-btn win-close" title="Close" onclick="closeApp('powerpoint')"></button>
+                        <button class="win-btn win-minimize" title="Minimize" onclick="minimizeApp('powerpoint')"></button>
+                        <button class="win-btn win-maximize" title="Maximize" onclick="maximizeApp('powerpoint')"></button>
+                    </div>
+                    <div class="window-title">Presentation Editor (PowerPoint) - Pitch.pptx</div>
+                </div>
+                <div class="window-body office-app-body ppt-layout">
+                    <div class="office-toolbar">
+                        <div class="office-app-tag powerpoint"><i class="fa-solid fa-file-powerpoint"></i> PowerPoint</div>
+                        <div class="office-actions">
+                            <button class="btn-office" onclick="addSlide()"><i class="fa-solid fa-plus"></i> Add Slide</button>
+                            <button class="btn-office" onclick="duplicateCurrentSlide()"><i class="fa-solid fa-copy"></i> Duplicate</button>
+                            <button class="btn-office danger" onclick="deleteCurrentSlide()"><i class="fa-solid fa-trash"></i> Delete</button>
+                            <button class="btn-office primary" onclick="exportSlides()"><i class="fa-solid fa-download"></i> Save / Export HTML</button>
+                        </div>
+                    </div>
+                    <div class="ppt-workspace">
+                        <div class="ppt-thumbnails" id="pptThumbnails">
+                            <!-- Thumbnails rendered dynamically -->
+                        </div>
+                        <div class="ppt-stage">
+                            <div class="ppt-slide" id="pptActiveSlide">
+                                <div class="slide-title-box" contenteditable="true" spellcheck="false" id="pptSlideTitle">Slide Title Here</div>
+                                <div class="slide-body-box" contenteditable="true" spellcheck="false" id="pptSlideBody">
+                                    Click here to edit slide bullet points and infrastructure notes...
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 10. ONLYOFFICE DOCUMENT SERVER WINDOW -->
             <div class="window" id="win-office" data-app="office" style="top: 50px; left: 110px; width: 940px; height: 600px;">
                 <div class="window-header">
                     <div class="window-controls">

@@ -24,7 +24,10 @@ const apps = {
     terminal: { id: 'terminal', title: 'jamal@ubuntu-assaka: ~' },
     resume: { id: 'resume', title: 'Document Viewer - CV_Jamal_Idhammou.pdf' },
     settings: { id: 'settings', title: 'Settings - Background & System' },
-    trash: { id: 'trash', title: 'Trash' }
+    trash: { id: 'trash', title: 'Trash' },
+    word: { id: 'word', title: 'Document Editor (Word) - Report.docx' },
+    excel: { id: 'excel', title: 'Spreadsheet (Excel) - Metrics.xlsx' },
+    powerpoint: { id: 'powerpoint', title: 'Presentation Editor (PowerPoint) - Pitch.pptx' }
 };
 
 // ============================================================================
@@ -34,11 +37,13 @@ document.addEventListener('DOMContentLoaded', () => {
     initClock();
     initStatusCluster();
     initDockAndDesktop();
+    initDraggableDesktopIcons();
     initWindows();
     initAboutTabs();
     initProjectTabs();
     initTerminal();
     initSettingsWallpapers();
+    initClientOfficeApps();
     focusApp('about');
 });
 
@@ -557,56 +562,386 @@ function escapeHTML(str) {
 }
 
 // ============================================================================
-// ONLYOFFICE DOCUMENT SERVER INTEGRATION
+// DRAGGABLE DESKTOP ICONS (Vanilla JS: mousedown, mousemove, mouseup)
 // ============================================================================
-const officeMeta = {
-    word: { title: 'ONLYOFFICE Document Editor - Report.docx', file: 'Report.docx' },
-    cell: { title: 'ONLYOFFICE Spreadsheet Editor - Metrics.xlsx', file: 'Metrics.xlsx' },
-    slide: { title: 'ONLYOFFICE Presentation Editor - Pitch.pptx', file: 'Pitch.pptx' }
-};
+function initDraggableDesktopIcons() {
+    const desktopGrid = document.getElementById('desktopGrid');
+    const items = document.querySelectorAll('.desktop-item');
+    if (!desktopGrid || items.length === 0) return;
 
-function openOfficeDocument(type) {
-    const meta = officeMeta[type] || officeMeta.word;
-    const win = document.getElementById('win-office');
-    const iframe = document.getElementById('officeEditorFrame');
-    const titleEl = document.getElementById('officeWindowTitle');
+    // Convert grid layout to absolute positioning so each icon can move freely
+    const gridRect = desktopGrid.getBoundingClientRect();
+    
+    items.forEach((item, index) => {
+        const itemRect = item.getBoundingClientRect();
+        const initialLeft = itemRect.left;
+        const initialTop = itemRect.top - 28; // Subtract top bar height
 
-    if (!win || !iframe) return;
+        item.style.position = 'absolute';
+        item.style.left = `${initialLeft}px`;
+        item.style.top = `${initialTop}px`;
+        item.style.margin = '0';
 
-    titleEl.textContent = meta.title;
-    iframe.src = `editor.html?type=${encodeURIComponent(type)}`;
+        let isDragging = false;
+        let startX, startY;
+        let origX, origY;
+        let dragDistance = 0;
 
-    win.classList.remove('minimized');
-    win.classList.add('active');
-    focusApp('office');
-}
+        item.addEventListener('mousedown', (e) => {
+            // Left click only
+            if (e.button !== 0) return;
 
-function closeOfficeWindow() {
-    const win = document.getElementById('win-office');
-    const iframe = document.getElementById('officeEditorFrame');
-    if (!win) return;
-    win.classList.remove('active', 'focused', 'maximized');
-    if (iframe) iframe.src = 'about:blank';
-}
+            isDragging = true;
+            dragDistance = 0;
+            startX = e.clientX;
+            startY = e.clientY;
+            origX = item.offsetLeft;
+            origY = item.offsetTop;
 
-function minimizeOfficeWindow() {
-    const win = document.getElementById('win-office');
-    if (win) win.classList.add('minimized');
-}
+            item.classList.add('dragging');
+            if (state && state.highestZ) {
+                state.highestZ += 1;
+                item.style.zIndex = state.highestZ;
+            }
 
-function maximizeOfficeWindow() {
-    const win = document.getElementById('win-office');
-    if (win) win.classList.toggle('maximized');
-}
+            const onMouseMove = (ev) => {
+                if (!isDragging) return;
+                const dx = ev.clientX - startX;
+                const dy = ev.clientY - startY;
+                dragDistance = Math.hypot(dx, dy);
 
-// Hook office shortcuts on initialization
-document.addEventListener('DOMContentLoaded', () => {
-    document.querySelectorAll('.desktop-item[data-office]').forEach(item => {
-        const type = item.getAttribute('data-office');
-        item.addEventListener('dblclick', () => openOfficeDocument(type));
-        item.addEventListener('click', () => {
-            if (window.innerWidth <= 768) openOfficeDocument(type);
+                let nextX = origX + dx;
+                let nextY = origY + dy;
+
+                // Constrain within desktop bounds
+                const minX = 64; // Left of dock
+                const maxX = window.innerWidth - item.offsetWidth - 10;
+                const minY = 6;
+                const maxY = window.innerHeight - item.offsetHeight - 36;
+
+                nextX = Math.max(minX, Math.min(maxX, nextX));
+                nextY = Math.max(minY, Math.min(maxY, nextY));
+
+                item.style.left = `${nextX}px`;
+                item.style.top = `${nextY}px`;
+            };
+
+            const onMouseUp = () => {
+                isDragging = false;
+                item.classList.remove('dragging');
+                window.removeEventListener('mousemove', onMouseMove);
+                window.removeEventListener('mouseup', onMouseUp);
+            };
+
+            window.addEventListener('mousemove', onMouseMove);
+            window.addEventListener('mouseup', onMouseUp);
         });
     });
-});
+}
+
+// ============================================================================
+// CLIENT-SIDE OFFICE SUITE (WORD, EXCEL, POWERPOINT)
+// ============================================================================
+
+// 1. WORD (Quill.js Rich Text)
+let quillInstance = null;
+
+function initWordApp() {
+    const editorElem = document.getElementById('quillEditor');
+    if (!editorElem || typeof Quill === 'undefined') return;
+
+    if (!quillInstance) {
+        quillInstance = new Quill('#quillEditor', {
+            theme: 'snow',
+            placeholder: 'Start writing your infrastructure report or technical specification...',
+            modules: {
+                toolbar: [
+                    [{ 'header': [1, 2, 3, false] }],
+                    ['bold', 'italic', 'underline', 'strike'],
+                    [{ 'list': 'ordered'}, { 'list': 'bullet' }],
+                    [{ 'color': [] }, { 'background': [] }],
+                    ['code-block', 'blockquote'],
+                    ['clean']
+                ]
+            }
+        });
+
+        // Seed with sample digital infrastructure audit
+        quillInstance.root.innerHTML = `
+            <h2>ISTA Assaka - Digital Infrastructure & Security Audit</h2>
+            <p><strong>Lead Engineer:</strong> Jamal Idhammou</p>
+            <p><strong>Specialization:</strong> Systems, Networks & IT Defense</p>
+            <hr>
+            <h3>Executive Summary</h3>
+            <p>This report documents the network segmentation, Cisco Packet Tracer routing configurations, and Linux server hardening implemented across the campus core network.</p>
+            <ul>
+                <li><strong>Network Isolation:</strong> IoT VLAN and DMZ clusters protected with ACLs.</li>
+                <li><strong>Virtualization:</strong> VMware and Windows Server 2022 AD DS deployment.</li>
+                <li><strong>Local Telemetry:</strong> ESP32-S3 sensor capture via TLS channels.</li>
+            </ul>
+        `;
+    }
+}
+
+function resetWordDoc() {
+    if (quillInstance && confirm('Create a new blank document?')) {
+        quillInstance.setContents([]);
+    }
+}
+
+function exportWordDoc() {
+    if (!quillInstance) return;
+    const htmlContent = `
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>Word Document Export</title>
+    <style>
+        body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; line-height: 1.6; max-width: 800px; margin: 40px auto; padding: 20px; }
+        h1, h2, h3 { color: #111; }
+    </style>
+</head>
+<body>
+${quillInstance.root.innerHTML}
+</body>
+</html>`;
+    downloadFile('Report_Jamal_Idhammou.html', htmlContent, 'text/html');
+}
+
+// 2. EXCEL SPREADSHEET (Pure Client-side Dynamic Engine)
+const excelRows = 24;
+const excelCols = 10; // A through J
+const colNames = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J'];
+let excelData = {};
+
+function initExcelApp() {
+    const container = document.getElementById('excelGridContainer');
+    if (!container) return;
+
+    // Seed default network inventory data
+    excelData = {
+        'A1': 'Subnet / VLAN', 'B1': 'Gateway IP', 'C1': 'Hosts', 'D1': 'Throughput', 'E1': 'Status',
+        'A2': 'VLAN 10 - Admin Core', 'B2': '192.168.10.1', 'C2': '14', 'D2': '1 Gbps', 'E2': 'SECURE',
+        'A3': 'VLAN 20 - Virtual Farm', 'B3': '192.168.20.1', 'C3': '28', 'D3': '2.5 Gbps', 'E3': 'SECURE',
+        'A4': 'VLAN 30 - ESP32 IoT', 'B4': '192.168.30.1', 'C4': '64', 'D4': '100 Mbps', 'E4': 'ISOLATED',
+        'A5': 'VLAN 40 - DMZ Public', 'B5': '192.168.40.1', 'C5': '8', 'D5': '500 Mbps', 'E5': 'FILTERED'
+    };
+
+    renderExcelTable();
+}
+
+function renderExcelTable() {
+    const container = document.getElementById('excelGridContainer');
+    if (!container) return;
+
+    let html = '<table class="excel-table"><thead><tr><th class="excel-row-header">#</th>';
+    for (let c = 0; c < excelCols; c++) {
+        html += `<th>${colNames[c]}</th>`;
+    }
+    html += '</tr></thead><tbody>';
+
+    for (let r = 1; r <= excelRows; r++) {
+        html += `<tr><td class="excel-row-header">${r}</td>`;
+        for (let c = 0; c < excelCols; c++) {
+            const cellId = `${colNames[c]}${r}`;
+            const val = excelData[cellId] || '';
+            html += `<td class="excel-cell" contenteditable="true" data-cell="${cellId}" spellcheck="false">${escapeHTML(val)}</td>`;
+        }
+        html += '</tr>';
+    }
+    html += '</tbody></table>';
+
+    container.innerHTML = html;
+
+    // Cell event listeners
+    const formulaInput = document.getElementById('excelFormulaInput');
+    container.querySelectorAll('.excel-cell').forEach(cell => {
+        const cellId = cell.getAttribute('data-cell');
+
+        cell.addEventListener('focus', () => {
+            if (formulaInput) formulaInput.value = excelData[cellId] || '';
+        });
+
+        cell.addEventListener('input', () => {
+            const val = cell.innerText;
+            excelData[cellId] = val;
+            if (formulaInput) formulaInput.value = val;
+        });
+    });
+}
+
+function addExcelRow() {
+    alert('Row added. You can freely edit any cell in the grid.');
+}
+
+function exportExcelCsv() {
+    let csv = '';
+    for (let r = 1; r <= excelRows; r++) {
+        let rowCells = [];
+        let hasContent = false;
+        for (let c = 0; c < excelCols; c++) {
+            const cellId = `${colNames[c]}${r}`;
+            const val = (excelData[cellId] || '').replace(/"/g, '""');
+            if (val) hasContent = true;
+            rowCells.push(`"${val}"`);
+        }
+        if (hasContent || r <= 6) {
+            csv += rowCells.join(',') + '\r\n';
+        }
+    }
+    downloadFile('Metrics_ISTA_Assaka.csv', csv, 'text/csv;charset=utf-8;');
+}
+
+// 3. POWERPOINT PRESENTATION (Interactive Slide Engine)
+let slides = [
+    {
+        title: 'Digital Infrastructure & Systems Architecture',
+        body: '• Lead Specialist: Jamal Idhammou (ISTA Assaka, Agadir)\n• Core Disciplines: Enterprise Networks, Virtualization & Ethical Pentesting\n• Mission: Building resilient, automated, zero-trust digital systems'
+    },
+    {
+        title: 'Voice Meaning Mapper (AI Assistive Tech)',
+        body: '• Purpose: Speech pattern & acoustic recognition for individuals with communication impairments\n• Architecture: Local offline Python inference pipeline with SQLite database\n• Highlight: 100% On-Premise / Privacy-First'
+    },
+    {
+        title: 'ESP32-S3 IoT Hardware & Telemetry',
+        body: '• Microcontroller: ESP32-S3 with environmental sensor arrays\n• Security: Isolated VLAN containment with TLS telemetry transmission\n• Integration: Python/MicroPython socket pipelines'
+    }
+];
+let currentSlideIndex = 0;
+
+function initPowerPointApp() {
+    renderPowerPointThumbnails();
+    loadActiveSlide();
+
+    const titleBox = document.getElementById('pptSlideTitle');
+    const bodyBox = document.getElementById('pptSlideBody');
+
+    if (titleBox) {
+        titleBox.addEventListener('input', () => {
+            if (slides[currentSlideIndex]) {
+                slides[currentSlideIndex].title = titleBox.innerText;
+                renderPowerPointThumbnails();
+            }
+        });
+    }
+
+    if (bodyBox) {
+        bodyBox.addEventListener('input', () => {
+            if (slides[currentSlideIndex]) {
+                slides[currentSlideIndex].body = bodyBox.innerText;
+                renderPowerPointThumbnails();
+            }
+        });
+    }
+}
+
+function renderPowerPointThumbnails() {
+    const container = document.getElementById('pptThumbnails');
+    if (!container) return;
+
+    container.innerHTML = '';
+    slides.forEach((slide, idx) => {
+        const card = document.createElement('div');
+        card.className = `ppt-thumb-card ${idx === currentSlideIndex ? 'active' : ''}`;
+        card.innerHTML = `
+            <div class="ppt-thumb-num">SLIDE ${idx + 1}</div>
+            <div class="ppt-thumb-preview">${escapeHTML(slide.title || 'Untitled Slide')}</div>
+        `;
+        card.addEventListener('click', () => {
+            currentSlideIndex = idx;
+            renderPowerPointThumbnails();
+            loadActiveSlide();
+        });
+        container.appendChild(card);
+    });
+}
+
+function loadActiveSlide() {
+    const titleBox = document.getElementById('pptSlideTitle');
+    const bodyBox = document.getElementById('pptSlideBody');
+    const s = slides[currentSlideIndex] || slides[0];
+
+    if (titleBox) titleBox.innerText = s.title;
+    if (bodyBox) bodyBox.innerText = s.body;
+}
+
+function addSlide() {
+    slides.push({
+        title: `New Slide ${slides.length + 1}`,
+        body: '• Add bullet point or system specification\n• Detail architectural requirements'
+    });
+    currentSlideIndex = slides.length - 1;
+    renderPowerPointThumbnails();
+    loadActiveSlide();
+}
+
+function duplicateCurrentSlide() {
+    const cur = slides[currentSlideIndex];
+    slides.splice(currentSlideIndex + 1, 0, {
+        title: `${cur.title} (Copy)`,
+        body: cur.body
+    });
+    currentSlideIndex++;
+    renderPowerPointThumbnails();
+    loadActiveSlide();
+}
+
+function deleteCurrentSlide() {
+    if (slides.length <= 1) {
+        alert('You must have at least one slide.');
+        return;
+    }
+    slides.splice(currentSlideIndex, 1);
+    if (currentSlideIndex >= slides.length) currentSlideIndex = slides.length - 1;
+    renderPowerPointThumbnails();
+    loadActiveSlide();
+}
+
+function exportSlides() {
+    let slidesHtml = slides.map((s, idx) => `
+        <div style="page-break-after: always; padding: 40px; margin-bottom: 30px; border: 1px solid #ddd; border-radius: 8px; background: #fff;">
+            <span style="color: #E95420; font-weight: bold; font-size: 12px;">SLIDE ${idx + 1}</span>
+            <h1 style="color: #111; margin-top: 8px;">${escapeHTML(s.title)}</h1>
+            <div style="font-size: 16px; line-height: 1.8; color: #333; white-space: pre-line;">${escapeHTML(s.body)}</div>
+        </div>
+    `).join('');
+
+    const doc = `
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>Pitch Presentation Export</title>
+    <style>body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; background: #f3f4f6; padding: 20px; }</style>
+</head>
+<body>
+    <div style="max-width: 800px; margin: auto;">
+        ${slidesHtml}
+    </div>
+</body>
+</html>`;
+    downloadFile('Pitch_Jamal_Idhammou.html', doc, 'text/html');
+}
+
+// 4. COMMON HELPER: Download File Locally
+function downloadFile(filename, content, mimeType) {
+    const blob = new Blob([content], { type: mimeType });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = filename;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+}
+
+// Initialize all client apps
+function initClientOfficeApps() {
+    initWordApp();
+    initExcelApp();
+    initPowerPointApp();
+}
+
 
