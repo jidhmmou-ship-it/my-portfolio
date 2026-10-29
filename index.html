@@ -88,8 +88,8 @@
                     <img src="themes/Yaru/apps/gedit.png" alt="CV Resume">
                     <span class="dock-indicator"></span>
                 </button>
-                <button class="dock-icon" data-app="artcraft" title="ArtCraft Suite (Storytold)">
-                    <img src="themes/Yaru/apps/artcraft-launcher.png" alt="ArtCraft">
+                <button class="dock-icon" data-app="wordcraft" title="WordCraft (.docx Word Processor)">
+                    <img src="themes/Yaru/apps/wordcraft.png" alt="WordCraft">
                     <span class="dock-indicator"></span>
                 </button>
                 <button class="dock-icon" data-app="settings" title="Settings">
@@ -137,9 +137,9 @@
                 <img src="themes/Yaru/apps/gedit.png" alt="Resume">
                 <span>Resume.pdf</span>
             </div>
-            <div class="desktop-item" tabindex="0" data-app="artcraft" title="Double-click to open Storytold ArtCraft Suite">
-                <img src="themes/Yaru/apps/artcraft-launcher.png" alt="ArtCraft Suite">
-                <span>ArtCraft.app</span>
+            <div class="desktop-item" tabindex="0" data-app="wordcraft" title="Double-click to open Storytold WordCraft">
+                <img src="themes/Yaru/apps/wordcraft.png" alt="WordCraft">
+                <span>WordCraft.app</span>
             </div>
             <div class="desktop-item" tabindex="0" data-app="trash">
                 <img src="themes/Yaru/system/user-trash.png" alt="Trash">
@@ -626,94 +626,36 @@
                 </div>
             </div>
 
-            <!-- 7. ARTCRAFT SUITE LAUNCHER WINDOW (Storytold) -->
-            <div class="window" id="win-artcraft" data-app="artcraft" style="top: 50px; left: 110px; width: 980px; height: 620px;">
+            <!-- 7. WORDCRAFT WINDOW (Storytold) -->
+            <div class="window" id="win-wordcraft" data-app="wordcraft" style="top: 50px; left: 110px; width: 980px; height: 620px;">
                 <div class="window-header">
                     <div class="window-controls">
-                        <button class="win-btn win-close" title="Close" onclick="closeApp('artcraft')"></button>
-                        <button class="win-btn win-minimize" title="Minimize" onclick="minimizeApp('artcraft')"></button>
-                        <button class="win-btn win-maximize" title="Maximize" onclick="maximizeApp('artcraft')"></button>
+                        <button class="win-btn win-close" title="Close" onclick="closeApp('wordcraft')"></button>
+                        <button class="win-btn win-minimize" title="Minimize" onclick="minimizeApp('wordcraft')"></button>
+                        <button class="win-btn win-maximize" title="Maximize" onclick="maximizeApp('wordcraft')"></button>
                     </div>
-                    <div class="window-title">Storytold ArtCraft Suite - Open-Source Creative & Productivity Apps</div>
+                    <div class="window-title">WordCraft - Storytold (.docx Word Processor in Pure Rust)</div>
                 </div>
-                <div class="window-body artcraft-window-body">
-                    <div class="artcraft-sidebar">
-                        <div class="artcraft-brand">
-                            <img src="themes/Yaru/apps/artcraft-launcher.png" alt="ArtCraft Logo" width="32" height="32">
+                <div class="window-body wordcraft-window-body">
+                    <div class="wordcraft-toolbar">
+                        <div class="wordcraft-app-info">
+                            <img src="themes/Yaru/apps/wordcraft.png" alt="WordCraft Icon" width="28" height="28">
                             <div>
-                                <div class="artcraft-brand-title">ArtCraft</div>
-                                <div class="artcraft-brand-sub">storytold suite</div>
+                                <h3>WordCraft</h3>
+                                <p>Fast, open-source word processor rebuilt in pure Rust. Reads & writes .docx.</p>
                             </div>
                         </div>
-                        <div class="artcraft-nav-group">
-                            <div class="artcraft-nav-heading">PRODUCTIVITY & OFFICE</div>
-                            <button class="artcraft-nav-btn active" data-app-url="https://getartcraft.com/apps/wordcraft" data-app-name="WordCraft" data-app-desc="Fast, open-source word processor rebuilt in pure Rust. Reads and writes .docx.">
-                                <i class="fa-solid fa-file-lines text-blue"></i>
-                                <span>WordCraft</span>
-                            </button>
-                            <button class="artcraft-nav-btn" data-app-url="https://getartcraft.com/apps/deckcraft" data-app-name="DeckCraft" data-app-desc="Modern presentation and slide designer built in pure Rust. Full .pptx presentation workflows.">
-                                <i class="fa-solid fa-chart-pie text-orange"></i>
-                                <span>DeckCraft</span>
-                            </button>
-                            <button class="artcraft-nav-btn" data-app-url="https://getartcraft.com/apps/gridcraft" data-app-name="GridCraft" data-app-desc="High-performance modern spreadsheet engine built in pure Rust.">
-                                <i class="fa-solid fa-table-cells text-green"></i>
-                                <span>GridCraft</span>
-                            </button>
-                            <button class="artcraft-nav-btn" data-app-url="https://getartcraft.com/apps/pdfcraft" data-app-name="PdfCraft" data-app-desc="PDF reader, editor, form filler, and markup tool.">
-                                <i class="fa-solid fa-file-pdf text-red"></i>
-                                <span>PdfCraft</span>
-                            </button>
-                        </div>
-                        <div class="artcraft-nav-group">
-                            <div class="artcraft-nav-heading">CREATIVE & DESIGN</div>
-                            <button class="artcraft-nav-btn" data-app-url="https://getartcraft.com/apps/photocraft" data-app-name="PhotoCraft" data-app-desc="Photo editing, retouching, color grading, and raster graphics.">
-                                <i class="fa-solid fa-image text-purple"></i>
-                                <span>PhotoCraft</span>
-                            </button>
-                            <button class="artcraft-nav-btn" data-app-url="https://getartcraft.com/apps/vectorcraft" data-app-name="VectorCraft" data-app-desc="Vector design and illustration tool.">
-                                <i class="fa-solid fa-bezier-curve text-pink"></i>
-                                <span>VectorCraft</span>
-                            </button>
-                            <button class="artcraft-nav-btn" data-app-url="https://getartcraft.com/apps/designcraft" data-app-name="DesignCraft" data-app-desc="Page layout, typesetting, and publishing for digital and print.">
-                                <i class="fa-solid fa-newspaper text-cyan"></i>
-                                <span>DesignCraft</span>
-                            </button>
-                            <button class="artcraft-nav-btn" data-app-url="https://getartcraft.com/apps/filmcraft" data-app-name="FilmCraft" data-app-desc="Video editing, timelines, multi-track audio, and rendering.">
-                                <i class="fa-solid fa-video text-teal"></i>
-                                <span>FilmCraft</span>
-                            </button>
-                            <button class="artcraft-nav-btn" data-app-url="https://getartcraft.com/apps/soundcraft" data-app-name="SoundCraft" data-app-desc="Digital audio workstation, recording, mixing, and synthesizers.">
-                                <i class="fa-solid fa-music text-yellow"></i>
-                                <span>SoundCraft</span>
-                            </button>
-                            <button class="artcraft-nav-btn" data-app-url="https://getartcraft.com/apps/cadcraft" data-app-name="CADCraft" data-app-desc="Parametric 2D drafting and 3D solid modeling.">
-                                <i class="fa-solid fa-cube text-indigo"></i>
-                                <span>CADCraft</span>
-                            </button>
-                            <button class="artcraft-nav-btn" data-app-url="https://getartcraft.com/apps/figcraft" data-app-name="FigCraft" data-app-desc="Interface design, prototyping, design systems, and developer handoff.">
-                                <i class="fa-brands fa-figma text-violet"></i>
-                                <span>FigCraft</span>
-                            </button>
+                        <div class="wordcraft-actions">
+                            <a href="https://github.com/storytold/wordcraft" target="_blank" rel="noopener noreferrer" class="btn-wordcraft">
+                                <i class="fa-brands fa-github"></i> github.com/storytold/wordcraft
+                            </a>
+                            <a href="https://getartcraft.com/apps/wordcraft" target="_blank" rel="noopener noreferrer" class="btn-wordcraft primary">
+                                <i class="fa-solid fa-arrow-up-right-from-square"></i> Open Fullscreen
+                            </a>
                         </div>
                     </div>
-                    <div class="artcraft-main-pane">
-                        <div class="artcraft-toolbar">
-                            <div class="artcraft-app-info">
-                                <h3 id="artcraftCurrentName">WordCraft</h3>
-                                <p id="artcraftCurrentDesc">Fast, open-source word processor rebuilt in pure Rust. Reads and writes .docx.</p>
-                            </div>
-                            <div class="artcraft-actions">
-                                <a id="artcraftRepoLink" href="https://github.com/storytold/wordcraft" target="_blank" rel="noopener noreferrer" class="btn-artcraft">
-                                    <i class="fa-brands fa-github"></i> Repository
-                                </a>
-                                <a id="artcraftExternalLink" href="https://getartcraft.com/apps/wordcraft" target="_blank" rel="noopener noreferrer" class="btn-artcraft primary">
-                                    <i class="fa-solid fa-arrow-up-right-from-square"></i> Open Fullscreen
-                                </a>
-                            </div>
-                        </div>
-                        <div class="artcraft-frame-wrapper">
-                            <iframe id="artcraftIframe" src="https://getartcraft.com/apps/wordcraft" title="Storytold ArtCraft Application Frame"></iframe>
-                        </div>
+                    <div class="wordcraft-frame-wrapper">
+                        <iframe id="wordcraftIframe" src="https://getartcraft.com/apps/wordcraft" title="Storytold WordCraft Application Frame"></iframe>
                     </div>
                 </div>
             </div>

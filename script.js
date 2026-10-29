@@ -23,7 +23,7 @@ const apps = {
     projects: { id: 'projects', title: 'Engineering Projects & Innovations' },
     terminal: { id: 'terminal', title: 'jamal@ubuntu-assaka: ~' },
     resume: { id: 'resume', title: 'Document Viewer - CV_Jamal_Idhammou.pdf' },
-    artcraft: { id: 'artcraft', title: 'Storytold ArtCraft Suite' },
+    wordcraft: { id: 'wordcraft', title: 'WordCraft - Storytold (.docx Word Processor)' },
     settings: { id: 'settings', title: 'Settings - Background & System' },
     trash: { id: 'trash', title: 'Trash' }
 };
@@ -41,7 +41,6 @@ document.addEventListener('DOMContentLoaded', () => {
     initProjectTabs();
     initTerminal();
     initSettingsWallpapers();
-    initArtCraftLauncher();
     focusApp('about');
 });
 
@@ -414,7 +413,7 @@ function executeTerminalCommand(cmd, originalCmd, output) {
   &bull; <span class="term-highlight">education</span>   : Display ISTA Assaka & secondary education credentials<br>
   &bull; <span class="term-highlight">contact</span>     : Display contact information & socials<br>
   &bull; <span class="term-highlight">resume</span>      : Open CV document viewer<br>
-  &bull; <span class="term-highlight">artcraft</span>    : Launch Storytold ArtCraft Suite (WordCraft, DeckCraft, GridCraft)<br>
+  &bull; <span class="term-highlight">wordcraft</span>   : Launch Storytold WordCraft (.docx Word Processor in Rust)<br>
   &bull; <span class="term-highlight">neofetch</span>    : Display system hardware & OS banner<br>
   &bull; <span class="term-highlight">ls</span>          : List directory files<br>
   &bull; <span class="term-highlight">cat &lt;file&gt;</span>    : View file content (e.g., cat bio.txt)<br>
@@ -468,13 +467,11 @@ City  : Agadir, Morocco
             res.innerHTML = `Opening CV Document Viewer...`;
             break;
 
-        case 'artcraft':
-        case 'craft':
         case 'wordcraft':
-        case 'deckcraft':
-        case 'gridcraft':
-            openApp('artcraft');
-            res.innerHTML = `Launching Storytold ArtCraft Suite...`;
+        case 'word':
+        case 'doc':
+            openApp('wordcraft');
+            res.innerHTML = `Launching Storytold WordCraft...`;
             break;
 
         case 'ls':
@@ -647,37 +644,6 @@ function initDraggableDesktopIcons() {
     });
 }
 
-// ============================================================================
-// STORYTOLD ARTCRAFT SUITE LAUNCHER
-// ============================================================================
-function initArtCraftLauncher() {
-    const navBtns = document.querySelectorAll('.artcraft-nav-btn');
-    const iframe = document.getElementById('artcraftIframe');
-    const titleEl = document.getElementById('artcraftCurrentName');
-    const descEl = document.getElementById('artcraftCurrentDesc');
-    const repoLink = document.getElementById('artcraftRepoLink');
-    const extLink = document.getElementById('artcraftExternalLink');
 
-    if (!iframe) return;
-
-    navBtns.forEach(btn => {
-        btn.addEventListener('click', () => {
-            navBtns.forEach(b => b.classList.remove('active'));
-            btn.classList.add('active');
-
-            const url = btn.getAttribute('data-app-url');
-            const name = btn.getAttribute('data-app-name');
-            const desc = btn.getAttribute('data-app-desc');
-            const repoName = name.toLowerCase();
-
-            if (titleEl) titleEl.textContent = name;
-            if (descEl) descEl.textContent = desc;
-            if (repoLink) repoLink.href = `https://github.com/storytold/${repoName}`;
-            if (extLink) extLink.href = url;
-
-            iframe.src = url;
-        });
-    });
-}
 
 

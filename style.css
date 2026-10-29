@@ -1342,152 +1342,63 @@ body, html {
 }
 
 /* ==========================================================================
-   STORYTOLD ARTCRAFT SUITE LAUNCHER
+   STORYTOLD WORDCRAFT WINDOW
    ========================================================================== */
-.artcraft-window-body {
+.wordcraft-window-body {
     display: flex;
+    flex-direction: column;
     height: calc(100% - 38px);
-    background-color: #121214;
+    background-color: #0b0b0c;
     color: #e4e4e7;
     overflow: hidden;
 }
 
-.artcraft-sidebar {
-    width: 240px;
-    background-color: #18181b;
-    border-right: 1px solid #27272a;
-    display: flex;
-    flex-direction: column;
-    overflow-y: auto;
-    padding: 12px 8px;
-    gap: 12px;
-}
-
-.artcraft-brand {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    padding: 6px 10px 12px;
-    border-bottom: 1px solid #27272a;
-}
-
-.artcraft-brand-title {
-    font-size: 15px;
-    font-weight: 700;
-    color: #ffffff;
-    letter-spacing: -0.2px;
-}
-
-.artcraft-brand-sub {
-    font-size: 10.5px;
-    color: #a1a1aa;
-    text-transform: uppercase;
-    letter-spacing: 0.6px;
-}
-
-.artcraft-nav-group {
-    display: flex;
-    flex-direction: column;
-    gap: 4px;
-}
-
-.artcraft-nav-heading {
-    font-size: 10px;
-    font-weight: 700;
-    color: #71717a;
-    letter-spacing: 0.8px;
-    padding: 4px 10px;
-}
-
-.artcraft-nav-btn {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    padding: 8px 12px;
-    border-radius: 6px;
-    border: none;
-    background: transparent;
-    color: #d4d4d8;
-    font-size: 13px;
-    font-weight: 500;
-    cursor: pointer;
-    text-align: left;
-    transition: background-color 0.15s ease, color 0.15s ease;
-}
-
-.artcraft-nav-btn i {
-    width: 18px;
-    text-align: center;
-    font-size: 14px;
-}
-
-.artcraft-nav-btn:hover {
-    background-color: #27272a;
-    color: #ffffff;
-}
-
-.artcraft-nav-btn.active {
-    background-color: #27272a;
-    color: #ffffff;
-    border-left: 3px solid #E95420;
-}
-
-/* Category icon accent colors */
-.text-blue { color: #3b82f6; }
-.text-orange { color: #f97316; }
-.text-green { color: #10b981; }
-.text-red { color: #ef4444; }
-.text-purple { color: #a855f7; }
-.text-pink { color: #ec4899; }
-.text-cyan { color: #06b6d4; }
-.text-teal { color: #14b8a6; }
-.text-yellow { color: #eab308; }
-.text-indigo { color: #6366f1; }
-.text-violet { color: #8b5cf6; }
-
-.artcraft-main-pane {
-    flex: 1;
-    display: flex;
-    flex-direction: column;
-    background-color: #09090b;
-    overflow: hidden;
-}
-
-.artcraft-toolbar {
-    height: 52px;
+.wordcraft-toolbar {
+    height: 54px;
     background-color: #18181b;
     border-bottom: 1px solid #27272a;
     display: flex;
     align-items: center;
     justify-content: space-between;
     padding: 0 16px;
+    gap: 14px;
+}
+
+.wordcraft-app-info {
+    display: flex;
+    align-items: center;
     gap: 12px;
 }
 
-.artcraft-app-info h3 {
+.wordcraft-app-info img {
+    border-radius: 6px;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.4);
+}
+
+.wordcraft-app-info h3 {
     font-size: 14px;
     font-weight: 700;
     color: #ffffff;
     margin: 0;
 }
 
-.artcraft-app-info p {
-    font-size: 11px;
+.wordcraft-app-info p {
+    font-size: 11.5px;
     color: #a1a1aa;
     margin: 2px 0 0;
 }
 
-.artcraft-actions {
+.wordcraft-actions {
     display: flex;
     align-items: center;
-    gap: 8px;
+    gap: 10px;
 }
 
-.btn-artcraft {
+.btn-wordcraft {
     display: inline-flex;
     align-items: center;
     gap: 6px;
-    padding: 5px 12px;
+    padding: 6px 14px;
     border-radius: 4px;
     font-size: 12px;
     font-weight: 500;
@@ -1495,31 +1406,32 @@ body, html {
     color: #e4e4e7;
     background-color: #27272a;
     border: 1px solid #3f3f46;
-    transition: background-color 0.15s ease;
+    transition: background-color 0.15s ease, border-color 0.15s ease;
 }
 
-.btn-artcraft:hover {
+.btn-wordcraft:hover {
     background-color: #3f3f46;
+    border-color: #52525b;
 }
 
-.btn-artcraft.primary {
+.btn-wordcraft.primary {
     background-color: #E95420;
     border-color: #d84513;
     color: #ffffff;
 }
 
-.btn-artcraft.primary:hover {
+.btn-wordcraft.primary:hover {
     background-color: #d84513;
 }
 
-.artcraft-frame-wrapper {
+.wordcraft-frame-wrapper {
     flex: 1;
     width: 100%;
-    height: calc(100% - 52px);
-    background-color: #000000;
+    height: calc(100% - 54px);
+    background-color: #0b0b0c;
 }
 
-#artcraftIframe {
+#wordcraftIframe {
     width: 100%;
     height: 100%;
     border: none;
