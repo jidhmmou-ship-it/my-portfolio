@@ -23,11 +23,9 @@ const apps = {
     projects: { id: 'projects', title: 'Engineering Projects & Innovations' },
     terminal: { id: 'terminal', title: 'jamal@ubuntu-assaka: ~' },
     resume: { id: 'resume', title: 'Document Viewer - CV_Jamal_Idhammou.pdf' },
+    artcraft: { id: 'artcraft', title: 'Storytold ArtCraft Suite' },
     settings: { id: 'settings', title: 'Settings - Background & System' },
-    trash: { id: 'trash', title: 'Trash' },
-    word: { id: 'word', title: 'Document Editor (Word) - Report.docx' },
-    excel: { id: 'excel', title: 'Spreadsheet (Excel) - Metrics.xlsx' },
-    powerpoint: { id: 'powerpoint', title: 'Presentation Editor (PowerPoint) - Pitch.pptx' }
+    trash: { id: 'trash', title: 'Trash' }
 };
 
 // ============================================================================
@@ -43,7 +41,7 @@ document.addEventListener('DOMContentLoaded', () => {
     initProjectTabs();
     initTerminal();
     initSettingsWallpapers();
-    initClientOfficeApps();
+    initArtCraftLauncher();
     focusApp('about');
 });
 
@@ -145,10 +143,6 @@ function openApp(appId) {
 
     if (appId === 'terminal') {
         setTimeout(focusTerminalInput, 50);
-    } else if (appId === 'word') {
-        setTimeout(initWordApp, 60);
-    } else if (appId === 'excel') {
-        setTimeout(initExcelApp, 60);
     }
 }
 
@@ -420,6 +414,7 @@ function executeTerminalCommand(cmd, originalCmd, output) {
   &bull; <span class="term-highlight">education</span>   : Display ISTA Assaka & secondary education credentials<br>
   &bull; <span class="term-highlight">contact</span>     : Display contact information & socials<br>
   &bull; <span class="term-highlight">resume</span>      : Open CV document viewer<br>
+  &bull; <span class="term-highlight">artcraft</span>    : Launch Storytold ArtCraft Suite (WordCraft, DeckCraft, GridCraft)<br>
   &bull; <span class="term-highlight">neofetch</span>    : Display system hardware & OS banner<br>
   &bull; <span class="term-highlight">ls</span>          : List directory files<br>
   &bull; <span class="term-highlight">cat &lt;file&gt;</span>    : View file content (e.g., cat bio.txt)<br>
@@ -471,6 +466,15 @@ City  : Agadir, Morocco
         case 'cv':
             openApp('resume');
             res.innerHTML = `Opening CV Document Viewer...`;
+            break;
+
+        case 'artcraft':
+        case 'craft':
+        case 'wordcraft':
+        case 'deckcraft':
+        case 'gridcraft':
+            openApp('artcraft');
+            res.innerHTML = `Launching Storytold ArtCraft Suite...`;
             break;
 
         case 'ls':
@@ -644,249 +648,36 @@ function initDraggableDesktopIcons() {
 }
 
 // ============================================================================
-// CLIENT-SIDE OFFICE SUITE (TINYMCE & JSPREADSHEET APIS)
+// STORYTOLD ARTCRAFT SUITE LAUNCHER
 // ============================================================================
+function initArtCraftLauncher() {
+    const navBtns = document.querySelectorAll('.artcraft-nav-btn');
+    const iframe = document.getElementById('artcraftIframe');
+    const titleEl = document.getElementById('artcraftCurrentName');
+    const descEl = document.getElementById('artcraftCurrentDesc');
+    const repoLink = document.getElementById('artcraftRepoLink');
+    const extLink = document.getElementById('artcraftExternalLink');
 
-// 1. WORD (TinyMCE API)
-let tinymceInitialized = false;
+    if (!iframe) return;
 
-function initWordApp() {
-    if (tinymceInitialized || typeof tinymce === 'undefined') return;
+    navBtns.forEach(btn => {
+        btn.addEventListener('click', () => {
+            navBtns.forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
 
-    tinymce.init({
-        selector: '#tinymce-word',
-        height: '100%',
-        menubar: 'file edit view insert format tools table',
-        plugins: [
-            'advlist', 'autolink', 'lists', 'link', 'image', 'charmap', 'preview',
-            'anchor', 'searchreplace', 'visualblocks', 'code', 'fullscreen',
-            'insertdatetime', 'media', 'table', 'help', 'wordcount'
-        ],
-        toolbar: 'undo redo | blocks fontfamily fontsize | bold italic underline strikethrough | ' +
-                 'alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | ' +
-                 'forecolor backcolor removeformat | link image table | code preview help',
-        content_style: 'body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; font-size: 14px; line-height: 1.6; padding: 20px; }',
-        setup: (editor) => {
-            editor.on('init', () => {
-                tinymceInitialized = true;
-            });
-        }
-    });
-}
+            const url = btn.getAttribute('data-app-url');
+            const name = btn.getAttribute('data-app-name');
+            const desc = btn.getAttribute('data-app-desc');
+            const repoName = name.toLowerCase();
 
-function resetWordDoc() {
-    if (typeof tinymce !== 'undefined' && tinymce.get('tinymce-word')) {
-        if (confirm('Clear document and start a new blank page?')) {
-            tinymce.get('tinymce-word').setContent('');
-        }
-    }
-}
+            if (titleEl) titleEl.textContent = name;
+            if (descEl) descEl.textContent = desc;
+            if (repoLink) repoLink.href = `https://github.com/storytold/${repoName}`;
+            if (extLink) extLink.href = url;
 
-function exportWordDoc() {
-    if (typeof tinymce === 'undefined' || !tinymce.get('tinymce-word')) return;
-    const content = tinymce.get('tinymce-word').getContent();
-    const htmlContent = `<!DOCTYPE html>
-<html>
-<head>
-    <meta charset="utf-8">
-    <title>Word Document Export</title>
-    <style>
-        body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; line-height: 1.6; max-width: 800px; margin: 40px auto; padding: 24px; color: #111; }
-    </style>
-</head>
-<body>
-${content}
-</body>
-</html>`;
-    downloadFile('Document.html', htmlContent, 'text/html');
-}
-
-// 2. EXCEL SPREADSHEET (Jspreadsheet API - Real Interactive Grid)
-let jexcelInstance = null;
-
-function initExcelApp() {
-    const container = document.getElementById('excel-container');
-    if (!container || typeof jspreadsheet === 'undefined') return;
-
-    if (!jexcelInstance) {
-        jexcelInstance = jspreadsheet(container, {
-            minDimensions: [15, 15],
-            tableOverflow: true,
-            tableWidth: '100%',
-            tableHeight: '100%',
-            allowToolbar: true,
-            defaultColAlign: 'left',
-            parseFormulas: true
+            iframe.src = url;
         });
-    }
-}
-
-function insertSpreadsheetRow() {
-    if (jexcelInstance) {
-        jexcelInstance.insertRow();
-    }
-}
-
-function insertSpreadsheetCol() {
-    if (jexcelInstance) {
-        jexcelInstance.insertColumn();
-    }
-}
-
-function exportSpreadsheetCsv() {
-    if (!jexcelInstance) return;
-    jexcelInstance.download(true); // Jspreadsheet direct CSV export
-}
-
-// 3. POWERPOINT PRESENTATION (Real Blank Interactive Slide Creator)
-let slides = [
-    {
-        title: '',
-        body: ''
-    }
-];
-let currentSlideIndex = 0;
-
-function initPowerPointApp() {
-    renderPowerPointThumbnails();
-    loadActiveSlide();
-
-    const titleBox = document.getElementById('pptSlideTitle');
-    const bodyBox = document.getElementById('pptSlideBody');
-
-    if (titleBox) {
-        titleBox.addEventListener('input', () => {
-            if (slides[currentSlideIndex]) {
-                slides[currentSlideIndex].title = titleBox.innerText;
-                renderPowerPointThumbnails();
-            }
-        });
-    }
-
-    if (bodyBox) {
-        bodyBox.addEventListener('input', () => {
-            if (slides[currentSlideIndex]) {
-                slides[currentSlideIndex].body = bodyBox.innerText;
-                renderPowerPointThumbnails();
-            }
-        });
-    }
-}
-
-function renderPowerPointThumbnails() {
-    const container = document.getElementById('pptThumbnails');
-    if (!container) return;
-
-    container.innerHTML = '';
-    slides.forEach((slide, idx) => {
-        const card = document.createElement('div');
-        card.className = `ppt-thumb-card ${idx === currentSlideIndex ? 'active' : ''}`;
-        const preview = slide.title.trim() ? escapeHTML(slide.title) : `Slide ${idx + 1}`;
-        card.innerHTML = `
-            <div class="ppt-thumb-num">SLIDE ${idx + 1}</div>
-            <div class="ppt-thumb-preview">${preview}</div>
-        `;
-        card.addEventListener('click', () => {
-            currentSlideIndex = idx;
-            renderPowerPointThumbnails();
-            loadActiveSlide();
-        });
-        container.appendChild(card);
     });
-}
-
-function loadActiveSlide() {
-    const titleBox = document.getElementById('pptSlideTitle');
-    const bodyBox = document.getElementById('pptSlideBody');
-    const s = slides[currentSlideIndex] || slides[0];
-
-    if (titleBox) {
-        titleBox.innerText = s.title;
-        titleBox.setAttribute('data-placeholder', 'Click to add slide title...');
-    }
-    if (bodyBox) {
-        bodyBox.innerText = s.body;
-        bodyBox.setAttribute('data-placeholder', 'Click to add text or bullet points...');
-    }
-}
-
-function addSlide() {
-    slides.push({
-        title: '',
-        body: ''
-    });
-    currentSlideIndex = slides.length - 1;
-    renderPowerPointThumbnails();
-    loadActiveSlide();
-}
-
-function duplicateCurrentSlide() {
-    const cur = slides[currentSlideIndex];
-    slides.splice(currentSlideIndex + 1, 0, {
-        title: cur.title,
-        body: cur.body
-    });
-    currentSlideIndex++;
-    renderPowerPointThumbnails();
-    loadActiveSlide();
-}
-
-function deleteCurrentSlide() {
-    if (slides.length <= 1) {
-        // Reset to single blank slide
-        slides = [{ title: '', body: '' }];
-        currentSlideIndex = 0;
-    } else {
-        slides.splice(currentSlideIndex, 1);
-        if (currentSlideIndex >= slides.length) currentSlideIndex = slides.length - 1;
-    }
-    renderPowerPointThumbnails();
-    loadActiveSlide();
-}
-
-function exportSlides() {
-    let slidesHtml = slides.map((s, idx) => `
-        <div style="page-break-after: always; padding: 48px; margin-bottom: 30px; border: 1px solid #e2e8f0; border-radius: 8px; background: #fff; min-height: 400px;">
-            <span style="color: #E95420; font-weight: bold; font-size: 12px; letter-spacing: 0.5px;">SLIDE ${idx + 1}</span>
-            <h1 style="color: #111; margin-top: 10px; font-size: 28px;">${escapeHTML(s.title || 'Untitled Slide')}</h1>
-            <div style="font-size: 16px; line-height: 1.8; color: #374151; white-space: pre-line; margin-top: 20px;">${escapeHTML(s.body)}</div>
-        </div>
-    `).join('');
-
-    const doc = `<!DOCTYPE html>
-<html>
-<head>
-    <meta charset="utf-8">
-    <title>Presentation Export</title>
-    <style>body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; background: #f3f4f6; padding: 24px; }</style>
-</head>
-<body>
-    <div style="max-width: 820px; margin: auto;">
-        ${slidesHtml}
-    </div>
-</body>
-</html>`;
-    downloadFile('Presentation.html', doc, 'text/html');
-}
-
-// 4. COMMON HELPER: Download File Locally
-function downloadFile(filename, content, mimeType) {
-    const blob = new Blob([content], { type: mimeType });
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement('a');
-    a.href = url;
-    a.download = filename;
-    document.body.appendChild(a);
-    a.click();
-    document.body.removeChild(a);
-    URL.revokeObjectURL(url);
-}
-
-// Initialize all client apps
-function initClientOfficeApps() {
-    initWordApp();
-    initExcelApp();
-    initPowerPointApp();
 }
 
 
